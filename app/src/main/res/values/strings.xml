@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Wild Mobile</string>
+
+    <!--LOGIN-->
+    <string name="hint_usuario">USUÁRIO</string>
+    <string name="hint_senha">SENHA</string>
 </resources>
