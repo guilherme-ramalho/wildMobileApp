@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import br.com.nanothings.wildmobile.helper.Constants;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
