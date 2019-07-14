@@ -4,4 +4,5 @@
     <!--LOGIN-->
     <string name="hint_usuario">USUÁRIO</string>
     <string name="hint_senha">SENHA</string>
+    <string name="login_error">Os campos usuário e senha são obrigatórios</string>
 </resources>
