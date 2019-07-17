@@ -3,11 +3,13 @@ package br.com.nanothings.wildmobile.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.helper.PreferenceManager;
 import br.com.nanothings.wildmobile.interfaces.CambistaService;
 import br.com.nanothings.wildmobile.model.Cambista;
 import br.com.nanothings.wildmobile.rest.RestObjResponse;
@@ -27,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.checarAutenticacao();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -61,9 +65,11 @@ public class LoginActivity extends AppCompatActivity {
                     RestObjResponse<Cambista> resposta = response.body();
 
                     if(resposta.meta.status.equals("success")) {
-                        Toast.makeText(LoginActivity.this, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
+                        new PreferenceManager(getApplicationContext()).setPreference("Cambista", resposta.data);
+
+                        startActivity(new Intent(LoginActivity.this, ApostaActivity.class));
                     } else {
-                        Toast.makeText(LoginActivity.this, "Erro", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -74,6 +80,14 @@ public class LoginActivity extends AppCompatActivity {
             });
         } catch(Exception ex) {
             Toast.makeText(this, "Catch", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checarAutenticacao() {
+        Cambista cambista = (Cambista) new PreferenceManager(this, Cambista.class).getPreference("Cambista");
+
+        if(cambista != null) {
+            startActivity(new Intent(LoginActivity.this, ApostaActivity.class));
         }
     }
 }
