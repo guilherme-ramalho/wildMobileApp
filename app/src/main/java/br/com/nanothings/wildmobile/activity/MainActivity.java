@@ -23,9 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.TextView;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.helper.PreferenceManager;
+import br.com.nanothings.wildmobile.model.Cambista;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
+    private Cambista cambista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         this.setNavigationDrawer();
+        this.sincronizarTextosNav();
     }
 
     private void setNavigationDrawer() {
@@ -106,6 +110,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void sincronizarTextosNav() {
+        cambista = (Cambista) new PreferenceManager(this, Cambista.class).getPreference("Cambista");
+        TextView nomeCambistaNav = navigationView.getHeaderView(0).findViewById(R.id.nome_cambista_nav);
+        nomeCambistaNav.setText(cambista.getNome());
     }
 
     private void encerrarSessao() {
