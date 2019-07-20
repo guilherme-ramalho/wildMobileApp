@@ -37,7 +37,7 @@ public class PreferenceManager {
     }
 
     public void clearPreferences() {
-        editor = context.getSharedPreferences("AUTH", 0).edit();
+        editor = context.getSharedPreferences("CAMBISTA", 0).edit();
         editor.clear();
         editor.commit();
     }

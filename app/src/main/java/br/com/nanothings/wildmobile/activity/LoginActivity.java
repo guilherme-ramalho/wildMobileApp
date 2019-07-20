@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(resposta.meta.status.equals("success")) {
                         new PreferenceManager(getApplicationContext()).setPreference("Cambista", resposta.data);
 
-                        startActivity(new Intent(LoginActivity.this, ApostaActivity.class));
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
                         Toast.makeText(LoginActivity.this, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                     }
@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         Cambista cambista = (Cambista) new PreferenceManager(this, Cambista.class).getPreference("Cambista");
 
         if(cambista != null) {
-            startActivity(new Intent(LoginActivity.this, ApostaActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
     }
 }
