@@ -1,5 +1,7 @@
 package br.com.nanothings.wildmobile.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -7,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -22,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.helper.PreferenceManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -95,14 +99,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_tools) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_exit) {
+            encerrarSessao();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void encerrarSessao() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(R.string.warning)
+                .setMessage(R.string.logoff_confirmation)
+                .setCancelable(false)
+                .setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do nothing
+                    }
+                })
+                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new PreferenceManager(getApplicationContext()).clearPreferences();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                }).create().show();
     }
 }
