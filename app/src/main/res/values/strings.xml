@@ -4,6 +4,7 @@
     <string name="warning">Atenção</string>
     <string name="accept">Sim</string>
     <string name="decline">Não</string>
+    <string name="server_error">Erro ao se conectar com o servidor</string>
 
     <!--LOGIN-->
     <string name="hint_usuario">USUÁRIO</string>

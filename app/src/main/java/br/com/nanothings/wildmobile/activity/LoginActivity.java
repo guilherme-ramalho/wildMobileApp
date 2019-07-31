@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.helper.PreferenceManager;
+import br.com.nanothings.wildmobile.helper.ProgressLoader;
 import br.com.nanothings.wildmobile.interfaces.CambistaService;
 import br.com.nanothings.wildmobile.model.Cambista;
 import br.com.nanothings.wildmobile.rest.RestObjResponse;
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.inputUsuario) EditText inputUsuario;
     @BindView(R.id.inputSenha) EditText inputSenha;
     private Call<RestObjResponse<Cambista>> request;
-    private ProgressDialog progressDialog;
+    private ProgressLoader progressLoader = new ProgressLoader(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        progressLoader.setLoader();
 
         ButterKnife.bind(this);
     }
@@ -51,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void autenticar() {
         try {
+            progressLoader.showLoader(true);
+
             String usuario = inputUsuario.getText().toString();
             String senha = inputSenha.getText().toString();
 
@@ -62,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
             request.enqueue(new Callback<RestObjResponse<Cambista>>() {
                 @Override
                 public void onResponse(Call<RestObjResponse<Cambista>> call, Response<RestObjResponse<Cambista>> response) {
+                    progressLoader.showLoader(false);
+
                     RestObjResponse<Cambista> resposta = response.body();
 
                     if(resposta.meta.status.equals("success")) {
@@ -75,11 +82,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<RestObjResponse<Cambista>> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this, "Falha", Toast.LENGTH_SHORT).show();
+                    progressLoader.showLoader(false);
+                    Toast.makeText(LoginActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch(Exception ex) {
-            Toast.makeText(this, "Catch", Toast.LENGTH_SHORT).show();
+            progressLoader.showLoader(false);
+            Toast.makeText(this, R.string.server_error, Toast.LENGTH_SHORT).show();
         }
     }
 
