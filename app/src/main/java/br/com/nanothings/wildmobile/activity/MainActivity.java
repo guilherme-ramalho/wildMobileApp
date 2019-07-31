@@ -21,11 +21,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
 import android.widget.TextView;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.fragments.ApostaFragment;
+import br.com.nanothings.wildmobile.fragments.ApuracaoFragment;
+import br.com.nanothings.wildmobile.fragments.InicioFragment;
 import br.com.nanothings.wildmobile.helper.PreferenceManager;
 import br.com.nanothings.wildmobile.model.Cambista;
 import butterknife.BindView;
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.setNavigationDrawer();
         this.sincronizarTextosNav();
+
+        fragmentInflater(new InicioFragment());
     }
 
     private void setNavigationDrawer() {
@@ -95,21 +101,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_exit) {
+        if (id == R.id.nav_inicio) {
+            fragmentInflater(new InicioFragment());
+        } else if (id == R.id.nav_apostas) {
+            fragmentInflater(new ApostaFragment());
+        } else if (id == R.id.nav_apuracao) {
+            fragmentInflater(new ApuracaoFragment());
+        } else if (id == R.id.nav_sair) {
             encerrarSessao();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void fragmentInflater(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_content, fragment)
+                .commit();
     }
 
     private void sincronizarTextosNav() {
