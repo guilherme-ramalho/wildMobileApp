@@ -15,6 +15,8 @@ public class ApostaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.menu_apostas);
+
         return inflater.inflate(R.layout.fragment_aposta, container, false);
     }
 }
