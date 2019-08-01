@@ -30,14 +30,19 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.checarAutenticacao();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         progressLoader.setLoader();
 
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        this.checarAutenticacao();
     }
 
     @OnClick(R.id.botaoEntrar)
