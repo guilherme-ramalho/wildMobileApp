@@ -2,7 +2,7 @@ package br.com.nanothings.wildmobile.model;
 
 import java.util.List;
 
-public class ModalidadeApostas {
+public class ModalidadeAposta {
     private int id;
     private String nome;
     private boolean flagAtivo;
