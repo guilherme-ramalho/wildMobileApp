@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
@@ -21,6 +23,7 @@ import br.com.nanothings.wildmobile.model.ModalidadeAposta;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,8 +49,26 @@ public class InicioFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_inicio, container, false);
     }
 
-    private void setSpinnerModalidade() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        ButterKnife.bind(this, view);
+    }
+
+    private void setSpinnerModalidade() {
+        ArrayList<String> listaNomeModalidade = new ArrayList<>();
+
+        for (ModalidadeAposta modalidadeAposta : listaModalidadeAposta) {
+            listaNomeModalidade.add(modalidadeAposta.getNome());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                context, android.R.layout.simple_spinner_item, listaNomeModalidade
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        modalidadeSpinner.setAdapter(adapter);
     }
 
     private void listarModalidadesAposta() {
@@ -65,6 +86,7 @@ public class InicioFragment extends Fragment {
 
                         if(resposta.meta.status.equals("success")) {
                             listaModalidadeAposta = resposta.data;
+                            setSpinnerModalidade();
                         } else {
                             Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                         }
