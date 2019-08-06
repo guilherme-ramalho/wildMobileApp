@@ -12,15 +12,15 @@ import java.util.List;
 
 public class RestListResponse<T> implements Serializable {
     @Expose
-    public List<T> Data;
+    public List<T> data;
 
     @Expose
-    public Meta Meta;
+    public Meta meta;
 
     public RestListResponse(String json, Class<T> type) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
-        this.Meta = new Gson().fromJson(jsonObject.getString("meta"), Meta.class);
-        this.Data = new GsonBuilder()
+        this.meta = new Gson().fromJson(jsonObject.getString("meta"), Meta.class);
+        this.data = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create()
                 .fromJson(

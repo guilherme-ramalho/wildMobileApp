@@ -2,6 +2,7 @@ package br.com.nanothings.wildmobile.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,32 +51,36 @@ public class InicioFragment extends Fragment {
     }
 
     private void listarModalidadesAposta() {
-        ModalidadeApostaService modalidadeApostaService = new RestRequest(context).getService(ModalidadeApostaService.class);
+        try {
+            ModalidadeApostaService modalidadeApostaService = new RestRequest(context).getService(ModalidadeApostaService.class);
 
-        if(requestModalidades != null) requestModalidades.cancel();
+            if(requestModalidades != null) requestModalidades.cancel();
 
-        requestModalidades = modalidadeApostaService.listar();
-        requestModalidades.enqueue(new Callback<RestListResponse<ModalidadeAposta>>() {
-            @Override
-            public void onResponse(Call<RestListResponse<ModalidadeAposta>> call, Response<RestListResponse<ModalidadeAposta>> response) {
-                if(response.isSuccessful()) {
-                    RestListResponse<ModalidadeAposta> resposta = response.body();
+            requestModalidades = modalidadeApostaService.listar();
+            requestModalidades.enqueue(new Callback<RestListResponse<ModalidadeAposta>>() {
+                @Override
+                public void onResponse(Call<RestListResponse<ModalidadeAposta>> call, Response<RestListResponse<ModalidadeAposta>> response) {
+                    if(response.isSuccessful()) {
+                        RestListResponse<ModalidadeAposta> resposta = response.body();
 
-                    if(resposta.Meta.status.equals("success")) {
-                        listaModalidadeAposta = resposta.Data;
+                        if(resposta.meta.status.equals("success")) {
+                            listaModalidadeAposta = resposta.data;
+                        } else {
+                            Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(context, resposta.Meta.mensagem, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
                     }
-                } else {
+                }
+
+                @Override
+                public void onFailure(Call<RestListResponse<ModalidadeAposta>> call, Throwable t) {
                     Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<RestListResponse<ModalidadeAposta>> call, Throwable t) {
-                Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        } catch(Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
