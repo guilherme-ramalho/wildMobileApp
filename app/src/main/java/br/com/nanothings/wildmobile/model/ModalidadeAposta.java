@@ -1,12 +1,13 @@
 package br.com.nanothings.wildmobile.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModalidadeAposta {
     private int id;
     private String nome;
     private boolean flagAtivo;
-    private List<TipoPalpite> palpites;
+    private List<TipoPalpite> tipos_palpite;
 
     public int getId() {
         return id;
@@ -33,10 +34,20 @@ public class ModalidadeAposta {
     }
 
     public List<TipoPalpite> getPalpites() {
-        return palpites;
+        return tipos_palpite;
     }
 
-    public void setPalpites(List<TipoPalpite> palpites) {
-        this.palpites = palpites;
+    public void setPalpites(List<TipoPalpite> tipos_palpite) {
+        this.tipos_palpite = tipos_palpite;
+    }
+
+    public ArrayList<String> getListaPalpites() {
+        ArrayList<String> listaPalpites = new ArrayList<>();
+
+        for (TipoPalpite tipoPalpite : tipos_palpite) {
+            listaPalpites.add(tipoPalpite.getNome() + " - " + nome);
+        }
+
+        return listaPalpites;
     }
 }

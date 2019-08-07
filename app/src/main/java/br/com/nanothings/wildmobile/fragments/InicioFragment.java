@@ -2,7 +2,6 @@ package br.com.nanothings.wildmobile.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,14 +56,14 @@ public class InicioFragment extends Fragment {
     }
 
     private void setSpinnerModalidade() {
-        ArrayList<String> listaNomeModalidade = new ArrayList<>();
+        ArrayList<String> listaTipoPalpite = new ArrayList<>();
 
         for (ModalidadeAposta modalidadeAposta : listaModalidadeAposta) {
-            listaNomeModalidade.add(modalidadeAposta.getNome());
+            listaTipoPalpite.addAll(modalidadeAposta.getListaPalpites());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                context, android.R.layout.simple_spinner_item, listaNomeModalidade
+                context, android.R.layout.simple_spinner_item, listaTipoPalpite
         );
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
