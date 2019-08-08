@@ -24,4 +24,12 @@
     <string name="menu_apostas">Apostas</string>
     <string name="menu_apuracao">Apuração</string>
     <string name="menu_exit">Sair</string>
+
+    <string-array name="premios_array">
+        <item>1º</item>
+        <item>2º</item>
+        <item>3º</item>
+        <item>4º</item>
+        <item>5º</item>
+    </string-array>
 </resources>

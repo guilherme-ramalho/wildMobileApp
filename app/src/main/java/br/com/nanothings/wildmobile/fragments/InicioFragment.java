@@ -63,10 +63,10 @@ public class InicioFragment extends Fragment {
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                context, android.R.layout.simple_spinner_item, listaTipoPalpite
+                context, R.layout.custom_simple_spinner_item, listaTipoPalpite
         );
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
         modalidadeSpinner.setAdapter(adapter);
     }
 
