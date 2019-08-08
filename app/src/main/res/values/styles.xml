@@ -19,7 +19,6 @@
 
     <style name="CustomSpinner">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/shape_spinner</item>
         <item name="android:padding">8dp</item>
         <item name="android:textColor">@android:color/black</item>
@@ -27,8 +26,13 @@
 
     <style name="CustomEditText">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/shape_edit_text</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="CustomButton">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/shape_button</item>
         <item name="android:padding">8dp</item>
     </style>
 

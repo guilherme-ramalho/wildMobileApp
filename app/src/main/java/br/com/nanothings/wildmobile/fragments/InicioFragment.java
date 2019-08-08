@@ -29,6 +29,9 @@ import retrofit2.Response;
 
 public class InicioFragment extends Fragment {
     @BindView(R.id.spinnerModalidade) Spinner modalidadeSpinner;
+    @BindView(R.id.spinnerInicioCerco) Spinner inicioCercoSpinner;
+    @BindView(R.id.spinnerFinalCerco) Spinner finalCercoSpinner;
+    @BindView(R.id.spinnerSorteio) Spinner sorteioSpinner;
     private List<ModalidadeAposta> listaModalidadeAposta;
     private Context context;
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
@@ -53,6 +56,8 @@ public class InicioFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+
+        setSpinnersCerco();
     }
 
     private void setSpinnerModalidade() {
@@ -68,6 +73,17 @@ public class InicioFragment extends Fragment {
 
         adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
         modalidadeSpinner.setAdapter(adapter);
+    }
+
+    private void setSpinnersCerco() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                context, R.array.premios_array, R.layout.custom_simple_spinner_item
+        );
+
+        adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
+
+        inicioCercoSpinner.setAdapter(adapter);
+        finalCercoSpinner.setAdapter(adapter);
     }
 
     private void listarModalidadesAposta() {
