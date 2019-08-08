@@ -1,11 +1,13 @@
 package br.com.nanothings.wildmobile.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
 import br.com.nanothings.wildmobile.model.ModalidadeAposta;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
@@ -28,19 +31,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InicioFragment extends Fragment {
-    @BindView(R.id.spinnerModalidade) Spinner modalidadeSpinner;
-    @BindView(R.id.spinnerInicioCerco) Spinner inicioCercoSpinner;
-    @BindView(R.id.spinnerFinalCerco) Spinner finalCercoSpinner;
-    @BindView(R.id.spinnerSorteio) Spinner sorteioSpinner;
-    private List<ModalidadeAposta> listaModalidadeAposta;
+    @BindView(R.id.spinnerSorteio)
+    Spinner sorteio;
+    @BindView(R.id.buttonAdicionarPalpite)
+    Button buttonAdicionarPalpite;
+
     private Context context;
-    private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity().getApplicationContext();
-        listarModalidadesAposta();
     }
 
     @Nullable
@@ -57,67 +58,15 @@ public class InicioFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        setSpinnersCerco();
+        adicionarPalpiteClick();
     }
 
-    private void setSpinnerModalidade() {
-        ArrayList<String> listaTipoPalpite = new ArrayList<>();
-
-        for (ModalidadeAposta modalidadeAposta : listaModalidadeAposta) {
-            listaTipoPalpite.addAll(modalidadeAposta.getListaPalpites());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                context, R.layout.custom_simple_spinner_item, listaTipoPalpite
-        );
-
-        adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
-        modalidadeSpinner.setAdapter(adapter);
+    private void adicionarPalpiteClick() {
+        buttonAdicionarPalpite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AdicionarPalpiteActivity.class));
+            }
+        });
     }
-
-    private void setSpinnersCerco() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                context, R.array.premios_array, R.layout.custom_simple_spinner_item
-        );
-
-        adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
-
-        inicioCercoSpinner.setAdapter(adapter);
-        finalCercoSpinner.setAdapter(adapter);
-    }
-
-    private void listarModalidadesAposta() {
-        try {
-            ModalidadeApostaService modalidadeApostaService = new RestRequest(context).getService(ModalidadeApostaService.class);
-
-            if(requestModalidades != null) requestModalidades.cancel();
-
-            requestModalidades = modalidadeApostaService.listar();
-            requestModalidades.enqueue(new Callback<RestListResponse<ModalidadeAposta>>() {
-                @Override
-                public void onResponse(Call<RestListResponse<ModalidadeAposta>> call, Response<RestListResponse<ModalidadeAposta>> response) {
-                    if(response.isSuccessful()) {
-                        RestListResponse<ModalidadeAposta> resposta = response.body();
-
-                        if(resposta.meta.status.equals("success")) {
-                            listaModalidadeAposta = resposta.data;
-                            setSpinnerModalidade();
-                        } else {
-                            Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<RestListResponse<ModalidadeAposta>> call, Throwable t) {
-                    Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch(Exception e) {
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
 }
