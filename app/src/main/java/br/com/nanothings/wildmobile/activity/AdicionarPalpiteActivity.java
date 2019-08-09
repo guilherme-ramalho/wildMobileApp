@@ -36,6 +36,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     @BindView(R.id.spinnerFinalCerco) Spinner spinnerFinalCerco;
     @BindView(R.id.buttonIncluirPalpite) Button buttonIncluirPalpite;
     @BindView(R.id.inputPalpite) EditText inputPalpite;
+    @BindView(R.id.inputValorAposta) EditText inputValorAposta;
 
     private List<ModalidadeAposta> listaModalidadeAposta;
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
@@ -55,6 +56,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         setSpinnersCerco();
         buttonIncluirPalpiteClick();
         spinnerModalidadeChange();
+        spinnerInicioCercoChange();
+        spinnerFinalCercoChange();
     }
 
     private void setSpinnerModalidade() {
@@ -127,14 +130,27 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     }
 
     private void retornarPalpite() {
-        palpite.setInicioCerto(spinnerInicioCerco.getSelectedItemPosition() + 1);
-        palpite.setFinalCerco(spinnerFinalCerco.getSelectedItemPosition() + 1);
-        palpite.setValorAposta(new BigDecimal(inputPalpite.getText().toString()));
+        if(!valorApostaValido()) return;
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("palpite", palpite);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private boolean valorApostaValido() {
+        String valorApostaStr = inputValorAposta.getText().toString();
+        
+        if(valorApostaStr.isEmpty()) {
+            Toast.makeText(context, R.string.aposta_vazia, Toast.LENGTH_SHORT).show();
+            inputValorAposta.requestFocus();
+
+            return false;
+        }
+
+        palpite.setValorAposta(new BigDecimal(inputPalpite.getText().toString()));
+
+        return true;
     }
 
     private void spinnerModalidadeChange() {
@@ -148,6 +164,34 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
                 }
 
                 palpite.setIdTipoPalpite(listaTipoPalpite.get(i).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void spinnerInicioCercoChange() {
+        spinnerInicioCerco.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                palpite.setInicioCerco(i+1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void spinnerFinalCercoChange() {
+        spinnerFinalCerco.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                palpite.setFinalCerco(i+1);
             }
 
             @Override

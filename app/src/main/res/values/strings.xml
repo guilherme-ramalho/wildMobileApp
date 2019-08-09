@@ -21,6 +21,7 @@
 
     <!--INÍCIO FRAGMENT-->
     <string name="sorteio_constraint">Para adicionar um palpite é necessário selecionar um sorteio.</string>
+    <string name="aposta_vazia">Por favor, informe o valor da aposta.</string>
 
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>

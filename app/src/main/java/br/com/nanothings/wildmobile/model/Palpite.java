@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Palpite implements Serializable {
-    private int idTipoPalpite, inicioCerto, finalCerco;
+    private int idTipoPalpite, inicioCerco, finalCerco;
     private String palpite;
     private BigDecimal valorAposta;
 
@@ -16,12 +16,12 @@ public class Palpite implements Serializable {
         this.idTipoPalpite = idTipoPalpite;
     }
 
-    public int getInicioCerto() {
-        return inicioCerto;
+    public int getInicioCerco() {
+        return inicioCerco;
     }
 
-    public void setInicioCerto(int inicioCerto) {
-        this.inicioCerto = inicioCerto;
+    public void setInicioCerco(int inicioCerco) {
+        this.inicioCerco = inicioCerco;
     }
 
     public int getFinalCerco() {
