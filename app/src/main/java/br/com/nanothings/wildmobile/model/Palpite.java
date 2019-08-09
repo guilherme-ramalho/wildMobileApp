@@ -1,5 +1,9 @@
 package br.com.nanothings.wildmobile.model;
 
-public class Palpite {
+import java.math.BigDecimal;
 
+public class Palpite {
+    private int idModalidade, inicioCerto, finalCerco;
+    private String palpite;
+    private BigDecimal valorAposta;
 }

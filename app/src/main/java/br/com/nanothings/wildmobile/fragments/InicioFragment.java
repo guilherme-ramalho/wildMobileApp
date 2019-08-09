@@ -64,11 +64,23 @@ public class InicioFragment extends Fragment {
         adicionarPalpiteClick();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        int numero = data.getIntExtra("numero", 1);
+    }
+
     private void adicionarPalpiteClick() {
         buttonAdicionarPalpite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AdicionarPalpiteActivity.class));
+                if(spinnerSorteio.getSelectedItem() != null) {
+                    Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
+                    startActivityForResult(intent, 1);
+                } else {
+                    Toast.makeText(context, R.string.sorteio_constraint, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

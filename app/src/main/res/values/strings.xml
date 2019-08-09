@@ -19,6 +19,9 @@
     <string name="action_settings">Settings</string>
     <string name="logoff_confirmation">Tem certeza que deseja encerrar a sessão?</string>
 
+    <!--INÍCIO FRAGMENT-->
+    <string name="sorteio_constraint">Para adicionar um palpite é necessário selecionar um sorteio.</string>
+
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>
     <string name="menu_apostas">Apostas</string>

@@ -3,8 +3,11 @@ package br.com.nanothings.wildmobile.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,6 +32,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     Spinner spinnerInicioCerco;
     @BindView(R.id.spinnerFinalCerco)
     Spinner spinnerFinalCerco;
+    @BindView(R.id.buttonIncluirPalpite)
+    Button buttonIncluirPalpite;
 
     private List<ModalidadeAposta> listaModalidadeAposta;
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
@@ -45,6 +50,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
         listarModalidadesAposta();
         setSpinnersCerco();
+        buttonIncluirPalpiteClick();
     }
 
     private void setSpinnerModalidade() {
@@ -105,5 +111,17 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         } catch(Exception e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void buttonIncluirPalpiteClick() {
+        buttonIncluirPalpite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("numero", 666);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
 }
