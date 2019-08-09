@@ -8,22 +8,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class RestObjResponse<T> implements Serializable {
+public class RestListResponse<T> implements Serializable {
     @Expose
-    public T data;
+    public List<T> data;
 
     @Expose
     public Meta meta;
 
-    public RestObjResponse(String json, Class<T> type) throws JSONException {
+    public RestListResponse(String json, Class<T> type) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
-
         this.meta = new Gson().fromJson(jsonObject.getString("meta"), Meta.class);
         this.data = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
                 .create()
-                .fromJson(jsonObject.getString("data"), new GenericData<T>(type));
+                .fromJson(
+                        jsonObject.getString("data"),
+                        new GenericData<T>(type)
+                );
     }
-
 }

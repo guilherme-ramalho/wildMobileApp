@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import br.com.nanothings.wildmobile.helper.Constants;
+import br.com.nanothings.wildmobile.helper.PreferenceManager;
+import br.com.nanothings.wildmobile.model.Cambista;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,7 +18,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestRequest {
+    public static String SUCCESS = "success";
+    public static String EXPIRED = "expired";
+
     private Context context;
+    private String token = "", idCambista = "";
 
     public RestRequest(Context context) {
         this.context = context;
@@ -36,6 +42,13 @@ public class RestRequest {
     }
 
     private OkHttpClient getInterceptor() {
+        final Cambista cambista = (Cambista) new PreferenceManager(context, Cambista.class).getPreference("Cambista");
+
+        if(cambista != null) {
+            token = cambista.getSessao().getToken();
+            idCambista = Integer.toString(cambista.getId());
+        }
+
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         httpClient.connectTimeout(30, TimeUnit.SECONDS)
@@ -47,7 +60,7 @@ public class RestRequest {
                         Request originalRequest = chain.request();
 
                         Request newRequest = originalRequest.newBuilder()
-                                .header("token", "")
+                                .header("token", token)
                                 .method(originalRequest.method(), originalRequest.body())
                                 .build();
 
