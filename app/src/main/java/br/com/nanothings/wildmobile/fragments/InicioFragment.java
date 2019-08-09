@@ -21,6 +21,7 @@ import java.util.List;
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
+import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.model.Sorteio;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
@@ -68,7 +69,7 @@ public class InicioFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        int numero = data.getIntExtra("numero", 1);
+        Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
     }
 
     private void adicionarPalpiteClick() {

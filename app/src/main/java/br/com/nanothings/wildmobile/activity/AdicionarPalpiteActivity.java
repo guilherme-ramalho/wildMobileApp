@@ -17,6 +17,7 @@ import java.util.List;
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
 import br.com.nanothings.wildmobile.model.ModalidadeAposta;
+import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
@@ -117,8 +118,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         buttonIncluirPalpite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Palpite palpite = new Palpite();
+                palpite.setPalpite("teste");
+
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("numero", 666);
+                resultIntent.putExtra("palpite", palpite);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
