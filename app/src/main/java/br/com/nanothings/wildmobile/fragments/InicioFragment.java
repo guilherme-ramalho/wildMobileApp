@@ -20,8 +20,8 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
-import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
-import br.com.nanothings.wildmobile.model.ModalidadeAposta;
+import br.com.nanothings.wildmobile.interfaces.SorteioService;
+import br.com.nanothings.wildmobile.model.Sorteio;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
@@ -32,11 +32,13 @@ import retrofit2.Response;
 
 public class InicioFragment extends Fragment {
     @BindView(R.id.spinnerSorteio)
-    Spinner sorteio;
+    Spinner spinnerSorteio;
     @BindView(R.id.buttonAdicionarPalpite)
     Button buttonAdicionarPalpite;
 
     private Context context;
+    private Call<RestListResponse<Sorteio>> requestSorteio;
+    private List<Sorteio> listaSorteio;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class InicioFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        listarSorteios();
         adicionarPalpiteClick();
     }
 
@@ -68,5 +71,55 @@ public class InicioFragment extends Fragment {
                 startActivity(new Intent(getActivity(), AdicionarPalpiteActivity.class));
             }
         });
+    }
+
+    private void listarSorteios() {
+        try {
+            SorteioService sorteioService = new RestRequest(context).getService(SorteioService.class);
+
+            if(requestSorteio != null) requestSorteio.cancel();
+
+            requestSorteio = sorteioService.listar();
+            requestSorteio.enqueue(new Callback<RestListResponse<Sorteio>>() {
+                @Override
+                public void onResponse(Call<RestListResponse<Sorteio>> call, Response<RestListResponse<Sorteio>> response) {
+                    if(response.isSuccessful()) {
+                        RestListResponse<Sorteio> resposta = response.body();
+
+                        if(resposta.meta.status.equals(RestRequest.SUCCESS)) {
+                            listaSorteio = resposta.data;
+                            setSpinnerSorteio();
+                        } else if(resposta.meta.status.equals(RestRequest.EXPIRED)) {
+                            //Implementar ação
+                        } else {
+                            Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RestListResponse<Sorteio>> call, Throwable t) {
+                    Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch(Exception e) {
+            Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setSpinnerSorteio() {
+        ArrayList<String> listaDataSorteio = new ArrayList<>();
+
+        for(Sorteio sorteio : listaSorteio) {
+            listaDataSorteio.add(sorteio.getData());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                context, R.layout.custom_simple_spinner_item, listaDataSorteio
+        );
+
+        spinnerSorteio.setAdapter(adapter);
     }
 }

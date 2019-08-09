@@ -21,7 +21,7 @@ public class RestObjResponse<T> implements Serializable {
 
         this.meta = new Gson().fromJson(jsonObject.getString("meta"), Meta.class);
         this.data = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
                 .create()
                 .fromJson(jsonObject.getString("data"), new GenericData<T>(type));
     }

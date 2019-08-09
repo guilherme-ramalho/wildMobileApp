@@ -18,6 +18,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestRequest {
+    public static String SUCCESS = "success";
+    public static String EXPIRED = "expired";
+
     private Context context;
     private String token = "", idCambista = "";
 

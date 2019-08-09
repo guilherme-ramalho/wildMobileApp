@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.AdicionarPalpiteActivity"
+            android:label="Incluir Palpite"
             android:parentActivityName=".activity.MainActivity"/>
         <activity
             android:name=".activity.MainActivity"
