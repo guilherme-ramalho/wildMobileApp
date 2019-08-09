@@ -40,6 +40,7 @@ public class InicioFragment extends Fragment {
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
     private List<Sorteio> listaSorteio;
+    private List<Palpite> listaPalpite;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

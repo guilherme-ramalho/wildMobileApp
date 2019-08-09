@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,7 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
 import br.com.nanothings.wildmobile.model.ModalidadeAposta;
 import br.com.nanothings.wildmobile.model.Palpite;
+import br.com.nanothings.wildmobile.model.TipoPalpite;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
@@ -27,17 +31,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AdicionarPalpiteActivity extends AppCompatActivity {
-    @BindView(R.id.spinnerModalidade)
-    Spinner spinnerModalidade;
-    @BindView(R.id.spinnerInicioCerco)
-    Spinner spinnerInicioCerco;
-    @BindView(R.id.spinnerFinalCerco)
-    Spinner spinnerFinalCerco;
-    @BindView(R.id.buttonIncluirPalpite)
-    Button buttonIncluirPalpite;
+    @BindView(R.id.spinnerModalidade) Spinner spinnerModalidade;
+    @BindView(R.id.spinnerInicioCerco) Spinner spinnerInicioCerco;
+    @BindView(R.id.spinnerFinalCerco) Spinner spinnerFinalCerco;
+    @BindView(R.id.buttonIncluirPalpite) Button buttonIncluirPalpite;
+    @BindView(R.id.inputPalpite) EditText inputPalpite;
 
     private List<ModalidadeAposta> listaModalidadeAposta;
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
+    private Palpite palpite = new Palpite();
     private Context context;
 
     @Override
@@ -52,6 +54,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         listarModalidadesAposta();
         setSpinnersCerco();
         buttonIncluirPalpiteClick();
+        spinnerModalidadeChange();
     }
 
     private void setSpinnerModalidade() {
@@ -118,13 +121,38 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         buttonIncluirPalpite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Palpite palpite = new Palpite();
-                palpite.setPalpite("teste");
+                retornarPalpite();
+            }
+        });
+    }
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("palpite", palpite);
-                setResult(RESULT_OK, resultIntent);
-                finish();
+    private void retornarPalpite() {
+        palpite.setInicioCerto(spinnerInicioCerco.getSelectedItemPosition() + 1);
+        palpite.setFinalCerco(spinnerFinalCerco.getSelectedItemPosition() + 1);
+        palpite.setValorAposta(new BigDecimal(inputPalpite.getText().toString()));
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("palpite", palpite);
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
+
+    private void spinnerModalidadeChange() {
+        spinnerModalidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                List<TipoPalpite> listaTipoPalpite = new ArrayList<>();
+
+                for (ModalidadeAposta modalidadeAposta : listaModalidadeAposta) {
+                    listaTipoPalpite.addAll(modalidadeAposta.getPalpites());
+                }
+
+                palpite.setIdTipoPalpite(listaTipoPalpite.get(i).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }

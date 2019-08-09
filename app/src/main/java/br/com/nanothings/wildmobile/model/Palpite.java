@@ -4,16 +4,16 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Palpite implements Serializable {
-    private int idModalidade, inicioCerto, finalCerco;
+    private int idTipoPalpite, inicioCerto, finalCerco;
     private String palpite;
     private BigDecimal valorAposta;
 
-    public int getIdModalidade() {
-        return idModalidade;
+    public int getIdTipoPalpite() {
+        return idTipoPalpite;
     }
 
-    public void setIdModalidade(int idModalidade) {
-        this.idModalidade = idModalidade;
+    public void setIdTipoPalpite(int idTipoPalpite) {
+        this.idTipoPalpite = idTipoPalpite;
     }
 
     public int getInicioCerto() {
