@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.helper.MajoraMask;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
 import br.com.nanothings.wildmobile.model.ModalidadeAposta;
 import br.com.nanothings.wildmobile.model.Palpite;
@@ -58,6 +59,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         spinnerModalidadeChange();
         spinnerInicioCercoChange();
         spinnerFinalCercoChange();
+
+        MajoraMask.currencyMask(inputValorAposta);
     }
 
     private void setSpinnerModalidade() {
@@ -131,11 +134,22 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
     private void retornarPalpite() {
         if(!valorApostaValido()) return;
+        if(!cercoValido()) return;
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("palpite", palpite);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+    
+    private boolean cercoValido() {
+        if(palpite.getInicioCerco() > palpite.getFinalCerco()) {
+            Toast.makeText(context, R.string.cerco_invalido, Toast.LENGTH_SHORT).show();
+            
+            return false;
+        }
+        
+        return true;
     }
 
     private boolean valorApostaValido() {
@@ -148,7 +162,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
             return false;
         }
 
-        palpite.setValorAposta(new BigDecimal(inputPalpite.getText().toString()));
+        palpite.setValorAposta(new BigDecimal(valorApostaStr));
 
         return true;
     }
