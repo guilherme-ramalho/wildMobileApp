@@ -15,6 +15,8 @@ public class MajoraMask {
         this.palpiteMask = palpiteMask;
     }
 
+    public String getPalpiteMask() { return this.palpiteMask; }
+
     public String unmask(String s) {
         return s.replaceAll("[.]", "").replaceAll("[-]", "")
                 .replaceAll("[/]", "").replaceAll("[(]", "")

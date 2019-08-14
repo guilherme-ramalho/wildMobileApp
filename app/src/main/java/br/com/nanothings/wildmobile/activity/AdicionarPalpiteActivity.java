@@ -67,6 +67,12 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         majoraMask.addCurrencyMask(inputValorAposta);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //Do nothing
+    }
+
     private void setSpinnerModalidade() {
         ArrayList<String> listaTipoPalpite = new ArrayList<>();
 
@@ -139,11 +145,39 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     private void retornarPalpite() {
         if(!valorApostaValido()) return;
         if(!cercoValido()) return;
+        if(!palpiteValido()) return;
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("palpite", palpite);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private boolean palpiteValido() {
+        String palpites = inputPalpite.getText().toString();
+
+        String mascaraPalpite = majoraMask.getPalpiteMask();
+
+        if(palpites.isEmpty() || palpites.length() != mascaraPalpite.length()) {
+            Toast.makeText(this, R.string.erro_tamanho_palpite, Toast.LENGTH_SHORT).show();
+            
+            return false;
+        }
+
+        String[] palpitesArray = palpites.split("-");
+
+        for(String palpite : palpitesArray) {
+            int palpiteInt = Integer.parseInt(palpite);
+            int valorMinimo = palpiteSelecionado.getValorMinimo();
+            int valorMaximo = palpiteSelecionado.getValorMaximo();
+
+            if(palpiteInt < valorMinimo || palpiteInt > valorMaximo) {
+                Toast.makeText(this, R.string.erro_valor_palpite, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     private boolean cercoValido() {
@@ -166,7 +200,16 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
             return false;
         }
 
-        palpite.setValorAposta(new BigDecimal(valorApostaStr));
+        valorApostaStr = Utils.brToUsCurrency(valorApostaStr);
+
+        BigDecimal valorAposta = new BigDecimal(valorApostaStr);
+
+        //O valor da aposta está zerado
+        if(valorAposta.compareTo(BigDecimal.ZERO) <= 0) {
+            palpite.setValorAposta(valorAposta);
+            Toast.makeText(context, R.string.erro_valor_aposta_zerado, Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
         return true;
     }
