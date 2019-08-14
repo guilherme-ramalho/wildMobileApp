@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.NumberFormat;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
@@ -42,8 +41,10 @@ public class PalpiteAdapter extends RecyclerView.Adapter<PalpiteViewHolder> {
     public void onBindViewHolder(@NonNull PalpiteViewHolder holder, int position) {
         Palpite palpite = listaPalpites.get(position);
 
+        holder.palpitesTexView.setText(palpite.getNumeros());
         holder.cercoTextView.setText(palpite.getTextCerco());
         holder.valorApostaTextView.setText(palpite.getTextValorFormatado());
+        holder.modalidadeTextView.setText(palpite.getTipoPalpite());
     }
 
     @Override

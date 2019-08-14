@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="MODALIDADE"
+        android:text="TIPO PALPITE"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinnerModalidade"
+        android:id="@+id/spinnerTipoPalpite"
         style="@style/CustomSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerModalidade" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipoPalpite" />
 
     <TextView
         android:id="@+id/textView8"
@@ -114,7 +114,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/spinnerInicioCerco"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerModalidade" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipoPalpite" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -160,6 +160,6 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/spinnerFinalCerco"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerModalidade" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerTipoPalpite" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

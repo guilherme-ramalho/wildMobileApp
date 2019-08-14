@@ -8,13 +8,21 @@ import br.com.nanothings.wildmobile.helper.Constants;
 
 public class Palpite implements Serializable {
     private int idTipoPalpite, inicioCerco, finalCerco;
-    private String palpite;
+    private String numeros, tipoPalpite;
     private BigDecimal valorAposta;
 
     public Palpite() {
         this.valorAposta = BigDecimal.ZERO;
         this.inicioCerco = 1;
         this.finalCerco = 1;
+    }
+
+    public String getTipoPalpite() {
+        return tipoPalpite;
+    }
+
+    public void setTipoPalpite(String tipoPalpite) {
+        this.tipoPalpite = tipoPalpite;
     }
 
     public int getIdTipoPalpite() {
@@ -41,12 +49,12 @@ public class Palpite implements Serializable {
         this.finalCerco = finalCerco;
     }
 
-    public String getPalpite() {
-        return palpite;
+    public String getNumeros() {
+        return numeros;
     }
 
-    public void setPalpite(String palpite) {
-        this.palpite = palpite;
+    public void setNumeros(String numeros) {
+        this.numeros = numeros;
     }
 
     public BigDecimal getValorAposta() {
@@ -62,7 +70,17 @@ public class Palpite implements Serializable {
     }
 
     public String getTextValorFormatado() {
-        return NumberFormat.getInstance(Constants.LOCALE_BRAZIL).format(this.valorAposta);
+        return "R$ " + NumberFormat.getInstance(Constants.LOCALE_BRAZIL).format(this.valorAposta);
     }
 
+    public int[] getNumeroArray() {
+        int[] intArray = new int[]{};
+        String[] strArray = this.numeros.split("-");
+
+        for (int i = 0; i <= strArray.length; i++) {
+            intArray[i] = Integer.parseInt(strArray[i]);
+        }
+
+        return intArray;
+    }
 }
