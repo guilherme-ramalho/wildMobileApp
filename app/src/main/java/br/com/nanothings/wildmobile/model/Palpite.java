@@ -2,11 +2,20 @@ package br.com.nanothings.wildmobile.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+
+import br.com.nanothings.wildmobile.helper.Constants;
 
 public class Palpite implements Serializable {
     private int idTipoPalpite, inicioCerco, finalCerco;
     private String palpite;
     private BigDecimal valorAposta;
+
+    public Palpite() {
+        this.valorAposta = BigDecimal.ZERO;
+        this.inicioCerco = 1;
+        this.finalCerco = 1;
+    }
 
     public int getIdTipoPalpite() {
         return idTipoPalpite;
@@ -47,4 +56,13 @@ public class Palpite implements Serializable {
     public void setValorAposta(BigDecimal valorAposta) {
         this.valorAposta = valorAposta;
     }
+
+    public String getTextCerco() {
+        return "Do " + this.inicioCerco + "º prêmio ao " + this.finalCerco + "º prêmio";
+    }
+
+    public String getTextValorFormatado() {
+        return NumberFormat.getInstance(Constants.LOCALE_BRAZIL).format(this.valorAposta);
+    }
+
 }

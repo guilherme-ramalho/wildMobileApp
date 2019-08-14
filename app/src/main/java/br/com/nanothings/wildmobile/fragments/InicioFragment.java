@@ -14,12 +14,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
+import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
+import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
 import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.model.Sorteio;
@@ -31,16 +36,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InicioFragment extends Fragment {
+public class InicioFragment extends Fragment implements PalpiteItemManager {
     @BindView(R.id.spinnerSorteio)
     Spinner spinnerSorteio;
     @BindView(R.id.buttonAdicionarPalpite)
     Button buttonAdicionarPalpite;
+    @BindView(R.id.recyclerPalpites)
+    RecyclerView recyclerPalpites;
 
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
     private List<Sorteio> listaSorteio;
-    private List<Palpite> listaPalpite;
+    private List<Palpite> listaPalpite = new ArrayList<>();
+    private PalpiteAdapter palpiteAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +72,7 @@ public class InicioFragment extends Fragment {
 
         listarSorteios();
         adicionarPalpiteClick();
+        setRecyclerPalpites();
     }
 
     @Override
@@ -71,6 +80,9 @@ public class InicioFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
+
+        listaPalpite.add(palpite);
+        palpiteAdapter.setDate(listaPalpite);
     }
 
     private void adicionarPalpiteClick() {
@@ -137,5 +149,27 @@ public class InicioFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerSorteio.setAdapter(adapter);
+    }
+
+    private void setRecyclerPalpites() {
+        palpiteAdapter = new PalpiteAdapter(listaPalpite, this);
+
+        recyclerPalpites.setLayoutManager(new LinearLayoutManager(context));
+        recyclerPalpites.setHasFixedSize(true);
+        recyclerPalpites.addItemDecoration(new DividerItemDecoration(
+                recyclerPalpites.getContext(), DividerItemDecoration.VERTICAL
+        ));
+
+        recyclerPalpites.setAdapter(palpiteAdapter);
+    }
+
+    @Override
+    public void deletarPalpite(int position) {
+
+    }
+
+    @Override
+    public void editarPalpite(int position) {
+
     }
 }
