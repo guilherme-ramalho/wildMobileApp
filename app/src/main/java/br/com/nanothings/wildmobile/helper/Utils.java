@@ -4,17 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 public class Utils {
-    private ProgressDialog progressDialog;
-
-    public void loadingDialog(Context context, boolean showDialog) {
-        if(showDialog) {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("teste");
-            progressDialog.show();
-        } else {
-            progressDialog.dismiss();
-        }
+    public static String repeatString(String target, int times) {
+        return new String(new char[times]).replace("\0", target);
     }
-
 }

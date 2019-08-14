@@ -134,6 +134,8 @@ public class InicioFragment extends Fragment {
                 context, R.layout.custom_simple_spinner_item, listaDataSorteio
         );
 
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinnerSorteio.setAdapter(adapter);
     }
 }

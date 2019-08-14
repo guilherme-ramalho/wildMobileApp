@@ -19,6 +19,7 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.helper.MajoraMask;
+import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
 import br.com.nanothings.wildmobile.model.ModalidadeAposta;
 import br.com.nanothings.wildmobile.model.Palpite;
@@ -43,6 +44,9 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
     private Palpite palpite = new Palpite();
     private Context context;
+    private TipoPalpite palpiteSelecionado;
+    private ModalidadeAposta modalidadeSelcionada;
+    private MajoraMask majoraMask = new MajoraMask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +64,14 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         spinnerInicioCercoChange();
         spinnerFinalCercoChange();
 
-        MajoraMask.currencyMask(inputValorAposta);
+        majoraMask.addCurrencyMask(inputValorAposta);
     }
 
     private void setSpinnerModalidade() {
         ArrayList<String> listaTipoPalpite = new ArrayList<>();
 
         for (ModalidadeAposta modalidadeAposta : listaModalidadeAposta) {
-            listaTipoPalpite.addAll(modalidadeAposta.getListaPalpites());
+            listaTipoPalpite.addAll(modalidadeAposta.getListaNomesPalpites());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -177,7 +181,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
                     listaTipoPalpite.addAll(modalidadeAposta.getPalpites());
                 }
 
-                palpite.setIdTipoPalpite(listaTipoPalpite.get(i).getId());
+                palpiteSelecionado = listaTipoPalpite.get(i);
+
+                aplicarMascaraPalpite(palpiteSelecionado.getIdModalidadeAposta());
+
+                palpite.setIdTipoPalpite(palpiteSelecionado.getId());
             }
 
             @Override
@@ -213,5 +221,28 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void aplicarMascaraPalpite(int idModalidade) {
+        for(ModalidadeAposta modalidadeAposta : listaModalidadeAposta) {
+            if(idModalidade == modalidadeAposta.getId()) {
+                modalidadeSelcionada =  modalidadeAposta;
+            }
+        }
+
+        int qtdInputs = modalidadeSelcionada.getQtdInputs();
+        int qtdDigitos = palpiteSelecionado.getQtdDigitos();
+
+        String pattern = "";
+
+        for(int i = 1 ; i <=qtdInputs ; i++) {
+            pattern += Utils.repeatString("#", qtdDigitos);
+
+            if(i < qtdInputs) pattern += "-";
+        }
+
+        majoraMask.removePalpiteTextWatcher(inputPalpite);
+        majoraMask.setPalpiteMask(pattern);
+        majoraMask.addPalpiteMask(inputPalpite);
     }
 }

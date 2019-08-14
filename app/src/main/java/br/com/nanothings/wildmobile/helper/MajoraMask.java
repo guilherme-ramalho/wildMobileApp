@@ -8,37 +8,21 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class MajoraMask {
-    public static void currencyMask(EditText editText) {
-        editText.addTextChangedListener(currencyMaskWatcher(editText));
+    private String palpiteMask;
+    private TextWatcher palpiteTextWatcher;
+
+    public void setPalpiteMask(String palpiteMask) {
+        this.palpiteMask = palpiteMask;
     }
 
-    public static String unmask(String s) {
+    public String unmask(String s) {
         return s.replaceAll("[.]", "").replaceAll("[-]", "")
                 .replaceAll("[/]", "").replaceAll("[(]", "")
                 .replaceAll("[)]", "").replaceAll(" ", "")
                 .replaceAll(",", "");
     }
 
-    public static String maskString(String mask, String text) {
-        int i = 0;
-        String mascara = "";
-        for (char m : mask.toCharArray()) {
-            if (m != '#') {
-                mascara += m;
-                continue;
-            }
-            try {
-                mascara += text.charAt(i);
-            } catch (Exception e) {
-                break;
-            }
-            i++;
-        }
-
-        return mascara;
-    }
-
-    private static boolean isASign(char c) {
+    private boolean isASign(char c) {
         if (c == '.' || c == '-' || c == '/' || c == '(' || c == ')' || c == ',' || c == ' ') {
             return true;
         } else {
@@ -46,8 +30,8 @@ public class MajoraMask {
         }
     }
 
-    private static TextWatcher currencyMaskWatcher(final EditText editText) {
-        return new TextWatcher() {
+    public void addCurrencyMask(EditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
             private String current = "";
 
             @Override
@@ -73,6 +57,75 @@ public class MajoraMask {
 
             @Override
             public void afterTextChanged(Editable s) { }
+        });
+    }
+
+    public void addPalpiteMask(EditText editText) {
+        palpiteTextWatcher = new TextWatcher() {
+            boolean isUpdating;
+            String old = "";
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = unmask(s.toString());
+                String mask = palpiteMask;
+                String maskedString = "";
+
+                if (isUpdating) {
+                    old = str;
+                    isUpdating = false;
+                    return;
+                }
+
+                int index = 0;
+                for (int i = 0; i < mask.length(); i++) {
+                    char m = mask.charAt(i);
+                    if (m != '#') {
+                        if (index == str.length() && str.length() < old.length()) {
+                            continue;
+                        }
+                        maskedString += m;
+                        continue;
+                    }
+
+                    try {
+                        maskedString += str.charAt(index);
+                    } catch (Exception e) {
+                        break;
+                    }
+
+                    index++;
+                }
+
+                if (maskedString.length() > 0) {
+                    char last_char = maskedString.charAt(maskedString.length() - 1);
+                    boolean hadSign = false;
+                    while (isASign(last_char) && str.length() == old.length()) {
+                        maskedString = maskedString.substring(0, maskedString.length() - 1);
+                        last_char = maskedString.charAt(maskedString.length() - 1);
+                        hadSign = true;
+                    }
+
+                    if (maskedString.length() > 0 && hadSign) {
+                        maskedString = maskedString.substring(0, maskedString.length() - 1);
+                    }
+                }
+
+                isUpdating = true;
+                editText.setText(maskedString);
+                editText.setSelection(maskedString.length());
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void afterTextChanged(Editable s) {}
         };
+
+        editText.addTextChangedListener(palpiteTextWatcher);
+    }
+
+    public void removePalpiteTextWatcher(EditText editText) {
+        if(palpiteTextWatcher != null) {
+            editText.removeTextChangedListener(palpiteTextWatcher);
+        }
     }
 }

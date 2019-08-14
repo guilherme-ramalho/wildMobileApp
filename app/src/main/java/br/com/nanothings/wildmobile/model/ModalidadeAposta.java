@@ -4,13 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModalidadeAposta {
-    private int id;
+    private int id, qtdInputs;
     private String nome;
     private boolean flagAtivo;
     private List<TipoPalpite> tipos_palpite;
 
     public int getId() {
         return id;
+    }
+
+    public int getQtdInputs() {
+        return qtdInputs;
+    }
+
+    public void setQtdInputs(int qtdInputs) {
+        this.qtdInputs = qtdInputs;
     }
 
     public void setId(int id) {
@@ -41,7 +49,7 @@ public class ModalidadeAposta {
         this.tipos_palpite = tipos_palpite;
     }
 
-    public ArrayList<String> getListaPalpites() {
+    public ArrayList<String> getListaNomesPalpites() {
         ArrayList<String> listaPalpites = new ArrayList<>();
 
         for (TipoPalpite tipoPalpite : tipos_palpite) {
