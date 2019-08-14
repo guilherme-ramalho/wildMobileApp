@@ -6,6 +6,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface SorteioService {
-    @GET("sorteio/listar")
+    @GET("sorteio/listar?listarValidos=true")
     Call<RestListResponse<Sorteio>> listar();
 }

@@ -19,6 +19,14 @@
     <string name="action_settings">Settings</string>
     <string name="logoff_confirmation">Tem certeza que deseja encerrar a sessão?</string>
 
+    <!--INÍCIO FRAGMENT-->
+    <string name="sorteio_constraint">Para adicionar um palpite é necessário selecionar um sorteio.</string>
+    <string name="aposta_vazia">Por favor, informe o valor da aposta.</string>
+    <string name="cerco_invalido">O intervalo de prêmio inicial não pode ser maior que o final.</string>
+    <string name="erro_tamanho_palpite">O palpite está vazio ou ainda não foi informado completamente.</string>
+    <string name="erro_valor_palpite">Valor do palpite inválido. Verifique se algum número excedeu o valor do grupo ou o máximo permitido.</string>
+    <string name="erro_valor_aposta_zerado">O valor da aposta deve ser maior que zero</string>
+
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>
     <string name="menu_apostas">Apostas</string>

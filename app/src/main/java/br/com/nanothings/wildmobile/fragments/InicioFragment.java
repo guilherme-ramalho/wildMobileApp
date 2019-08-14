@@ -21,6 +21,7 @@ import java.util.List;
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
+import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.model.Sorteio;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
@@ -39,6 +40,7 @@ public class InicioFragment extends Fragment {
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
     private List<Sorteio> listaSorteio;
+    private List<Palpite> listaPalpite;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,11 +66,23 @@ public class InicioFragment extends Fragment {
         adicionarPalpiteClick();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
+    }
+
     private void adicionarPalpiteClick() {
         buttonAdicionarPalpite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AdicionarPalpiteActivity.class));
+                if(spinnerSorteio.getSelectedItem() != null) {
+                    Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
+                    startActivityForResult(intent, 1);
+                } else {
+                    Toast.makeText(context, R.string.sorteio_constraint, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -119,6 +133,8 @@ public class InicioFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 context, R.layout.custom_simple_spinner_item, listaDataSorteio
         );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerSorteio.setAdapter(adapter);
     }
