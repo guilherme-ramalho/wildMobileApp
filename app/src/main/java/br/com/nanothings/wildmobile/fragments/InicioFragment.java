@@ -9,21 +9,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
+import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
 import br.com.nanothings.wildmobile.model.Palpite;
@@ -43,12 +49,21 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     Button buttonAdicionarPalpite;
     @BindView(R.id.recyclerPalpites)
     RecyclerView recyclerPalpites;
+    @BindView(R.id.valorApostaTextView)
+    TextView valorApostaTextView;
+    @BindView(R.id.valorPremioTextView)
+    TextView valorPremioTextView;
+    @BindView(R.id.botaoFinalizarAposta)
+    Button botaoFinalizarAposta;
 
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
     private List<Sorteio> listaSorteio;
     private List<Palpite> listaPalpite = new ArrayList<>();
     private PalpiteAdapter palpiteAdapter;
+    private ItemTouchHelper.SimpleCallback itemTouchCallback;
+    private BigDecimal valorTotalAposta = BigDecimal.ZERO;
+    private BigDecimal valorTotalPremio = BigDecimal.ZERO;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +87,9 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
         listarSorteios();
         adicionarPalpiteClick();
+        setPalpiteSwipe();
         setRecyclerPalpites();
+        botaoFinalizarApostaClick();
     }
 
     @Override
@@ -82,7 +99,25 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
 
         listaPalpite.add(palpite);
-        palpiteAdapter.setDate(listaPalpite);
+        palpiteAdapter.setData(listaPalpite);
+
+        calcularTotais();
+    }
+
+    @Override
+    public void deletarPalpite(int position) {
+        Palpite palpite = listaPalpite.get(position);
+        listaPalpite.remove(position);
+        palpiteAdapter.notifyItemRemoved(position);
+
+        calcularTotais();
+
+        desfazerExclusaoPalpite(palpite, position);
+    }
+
+    @Override
+    public void editarPalpite(int position) {
+
     }
 
     private void adicionarPalpiteClick() {
@@ -160,16 +195,55 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                 recyclerPalpites.getContext(), DividerItemDecoration.VERTICAL
         ));
 
+        new ItemTouchHelper(itemTouchCallback).attachToRecyclerView(recyclerPalpites);
+
         recyclerPalpites.setAdapter(palpiteAdapter);
     }
 
-    @Override
-    public void deletarPalpite(int position) {
+    private void setPalpiteSwipe() {
+        itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
 
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                deletarPalpite(viewHolder.getAdapterPosition());
+            }
+        };
     }
 
-    @Override
-    public void editarPalpite(int position) {
+    private void desfazerExclusaoPalpite(final Palpite palpite, final int position) {
+        View view = getView().findViewById(R.id.inicioLayout);
 
+        Snackbar.make(view, R.string.palpite_removido, Snackbar.LENGTH_LONG)
+                .setAction(R.string.desfazer, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listaPalpite.add(position, palpite);
+                        palpiteAdapter.setData(listaPalpite);
+                        calcularTotais();
+                    }
+                }).show();
+    }
+
+    private void calcularTotais() {
+        valorTotalAposta = BigDecimal.ZERO;
+
+        for(Palpite palpite : listaPalpite) {
+            valorTotalAposta = valorTotalAposta.add(palpite.getValorAposta());
+        }
+
+        valorApostaTextView.setText(Utils.bigDecimalToStr(valorTotalAposta));
+    }
+
+    private void botaoFinalizarApostaClick() {
+        botaoFinalizarAposta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Implementando...", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

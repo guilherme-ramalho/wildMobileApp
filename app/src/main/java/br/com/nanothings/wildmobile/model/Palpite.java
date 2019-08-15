@@ -69,10 +69,6 @@ public class Palpite implements Serializable {
         return "Do " + this.inicioCerco + "º prêmio ao " + this.finalCerco + "º prêmio";
     }
 
-    public String getTextValorFormatado() {
-        return "R$ " + NumberFormat.getInstance(Constants.LOCALE_BRAZIL).format(this.valorAposta);
-    }
-
     public int[] getNumeroArray() {
         int[] intArray = new int[]{};
         String[] strArray = this.numeros.split("-");

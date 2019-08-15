@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.viewholder.PalpiteViewHolder;
@@ -23,7 +24,7 @@ public class PalpiteAdapter extends RecyclerView.Adapter<PalpiteViewHolder> {
         this.palpiteItemManager = palpiteItemManager;
     }
 
-    public void setDate(List<Palpite> listaPalpites) {
+    public void setData(List<Palpite> listaPalpites) {
         this.listaPalpites = listaPalpites;
         notifyDataSetChanged();
     }
@@ -43,7 +44,7 @@ public class PalpiteAdapter extends RecyclerView.Adapter<PalpiteViewHolder> {
 
         holder.palpitesTexView.setText(palpite.getNumeros());
         holder.cercoTextView.setText(palpite.getTextCerco());
-        holder.valorApostaTextView.setText(palpite.getTextValorFormatado());
+        holder.valorApostaTextView.setText(Utils.bigDecimalToStr(palpite.getValorAposta()));
         holder.modalidadeTextView.setText(palpite.getTipoPalpite());
     }
 

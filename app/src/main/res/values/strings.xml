@@ -26,6 +26,8 @@
     <string name="erro_tamanho_palpite">O numeros está vazio ou ainda não foi informado completamente.</string>
     <string name="erro_valor_palpite">Valor do numeros inválido. Verifique se algum número excedeu o valor do grupo ou o máximo permitido.</string>
     <string name="erro_valor_aposta_zerado">O valor da aposta deve ser maior que zero</string>
+    <string name="palpite_removido">Palpite removido</string>
+    <string name="desfazer">Desfazer</string>
 
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>
