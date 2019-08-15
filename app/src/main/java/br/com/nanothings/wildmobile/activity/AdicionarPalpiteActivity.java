@@ -44,7 +44,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
     private Palpite palpite = new Palpite();
     private Context context;
-    private TipoPalpite palpiteSelecionado;
+    private TipoPalpite tipoPalpite;
     private ModalidadeAposta modalidadeSelcionada;
     private MajoraMask majoraMask = new MajoraMask();
 
@@ -168,8 +168,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
         for(String valor : valoresPalpiteArray) {
             int palpiteInt = Integer.parseInt(valor);
-            int valorMinimo = palpiteSelecionado.getValorMinimo();
-            int valorMaximo = palpiteSelecionado.getValorMaximo();
+            int valorMinimo = tipoPalpite.getValorMinimo();
+            int valorMaximo = tipoPalpite.getValorMaximo();
 
             if(palpiteInt < valorMinimo || palpiteInt > valorMaximo) {
                 Toast.makeText(this, R.string.erro_valor_palpite, Toast.LENGTH_LONG).show();
@@ -227,12 +227,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
                     listaTipoPalpite.addAll(modalidadeAposta.getPalpites());
                 }
 
-                palpiteSelecionado = listaTipoPalpite.get(i);
+                tipoPalpite = listaTipoPalpite.get(i);
 
-                aplicarMascaraPalpite(palpiteSelecionado.getIdModalidadeAposta());
+                aplicarMascaraPalpite(tipoPalpite.getIdModalidadeAposta());
 
-                palpite.setIdTipoPalpite(palpiteSelecionado.getId());
-                palpite.setTipoPalpite(spinnerTipoPalpite.getSelectedItem().toString());
+                palpite.setTipoPalpite(tipoPalpite);
             }
 
             @Override
@@ -278,7 +277,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         }
 
         int qtdInputs = modalidadeSelcionada.getQtdInputs();
-        int qtdDigitos = palpiteSelecionado.getQtdDigitos();
+        int qtdDigitos = tipoPalpite.getQtdDigitos();
 
         String pattern = "";
 

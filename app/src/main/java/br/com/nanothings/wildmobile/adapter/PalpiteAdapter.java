@@ -45,7 +45,7 @@ public class PalpiteAdapter extends RecyclerView.Adapter<PalpiteViewHolder> {
         holder.palpitesTexView.setText(palpite.getNumeros());
         holder.cercoTextView.setText(palpite.getTextCerco());
         holder.valorApostaTextView.setText(Utils.bigDecimalToStr(palpite.getValorAposta()));
-        holder.modalidadeTextView.setText(palpite.getTipoPalpite());
+        holder.modalidadeTextView.setText(palpite.getTipoPalpite().getNome());
     }
 
     @Override

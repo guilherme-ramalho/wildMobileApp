@@ -1,6 +1,8 @@
 package br.com.nanothings.wildmobile.model;
 
-public class TipoPalpite {
+import java.io.Serializable;
+
+public class TipoPalpite implements Serializable {
     private int id, idModalidadeAposta, qtdDigitos, valorMinimo, valorMaximo;
     private String nome;
     private boolean flagAtivo;
