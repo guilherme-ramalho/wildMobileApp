@@ -62,8 +62,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     private List<Palpite> listaPalpite = new ArrayList<>();
     private PalpiteAdapter palpiteAdapter;
     private ItemTouchHelper.SimpleCallback itemTouchCallback;
-    private BigDecimal valorTotalAposta = BigDecimal.ZERO;
-    private BigDecimal valorTotalPremio = BigDecimal.ZERO;
+    private BigDecimal valorTotalAposta, valorTotalPremio;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -230,12 +229,18 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     private void calcularTotais() {
         valorTotalAposta = BigDecimal.ZERO;
+        valorTotalPremio = BigDecimal.ZERO;
 
         for(Palpite palpite : listaPalpite) {
             valorTotalAposta = valorTotalAposta.add(palpite.getValorAposta());
+
+            BigDecimal multiplicadorPalpite = new BigDecimal(palpite.getTipoPalpite().getMultiplicador());
+            BigDecimal premioPalpiteAtual = palpite.getValorAposta().multiply(multiplicadorPalpite);
+            valorTotalPremio = valorTotalPremio.add(premioPalpiteAtual);
         }
 
         valorApostaTextView.setText(Utils.bigDecimalToStr(valorTotalAposta));
+        valorPremioTextView.setText(Utils.bigDecimalToStr(valorTotalPremio));
     }
 
     private void botaoFinalizarApostaClick() {

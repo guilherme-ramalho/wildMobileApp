@@ -11,7 +11,8 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 
 public class PalpiteViewHolder extends RecyclerView.ViewHolder {
-    public TextView modalidadeTextView, valorApostaTextView, palpitesTexView, cercoTextView;
+    public TextView modalidadeTextView, valorApostaTextView, palpitesTexView,
+            cercoTextView, multiplicadorTextView;
     public LinearLayout palpiteLayout;
     private PalpiteItemManager palpiteItemManager;
 
@@ -23,6 +24,7 @@ public class PalpiteViewHolder extends RecyclerView.ViewHolder {
         palpitesTexView = itemView.findViewById(R.id.palpitesTextView);
         cercoTextView = itemView.findViewById(R.id.cercoTextView);
         palpiteLayout = itemView.findViewById(R.id.palpiteLayout);
+        multiplicadorTextView = itemView.findViewById(R.id.multiplicadorTextView);
 
         this.palpiteItemManager = palpiteItemManager;
     }
