@@ -4,16 +4,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Palpite implements Serializable {
-    private int idTipoPalpite, inicioCerco, finalCerco;
-    private String palpite;
+    private int inicioCerco, finalCerco;
+    private String numeros;
     private BigDecimal valorAposta;
+    private TipoPalpite tipoPalpite;
 
-    public int getIdTipoPalpite() {
-        return idTipoPalpite;
-    }
-
-    public void setIdTipoPalpite(int idTipoPalpite) {
-        this.idTipoPalpite = idTipoPalpite;
+    public Palpite() {
+        this.valorAposta = BigDecimal.ZERO;
+        this.inicioCerco = 1;
+        this.finalCerco = 1;
     }
 
     public int getInicioCerco() {
@@ -32,12 +31,12 @@ public class Palpite implements Serializable {
         this.finalCerco = finalCerco;
     }
 
-    public String getPalpite() {
-        return palpite;
+    public String getNumeros() {
+        return numeros;
     }
 
-    public void setPalpite(String palpite) {
-        this.palpite = palpite;
+    public void setNumeros(String numeros) {
+        this.numeros = numeros;
     }
 
     public BigDecimal getValorAposta() {
@@ -46,5 +45,28 @@ public class Palpite implements Serializable {
 
     public void setValorAposta(BigDecimal valorAposta) {
         this.valorAposta = valorAposta;
+    }
+
+    public TipoPalpite getTipoPalpite() {
+        return tipoPalpite;
+    }
+
+    public void setTipoPalpite(TipoPalpite tipoPalpite) {
+        this.tipoPalpite = tipoPalpite;
+    }
+
+    public String getTextCerco() {
+        return "Do " + this.inicioCerco + "º prêmio ao " + this.finalCerco + "º prêmio";
+    }
+
+    public int[] getNumeroArray() {
+        int[] intArray = new int[]{};
+        String[] strArray = this.numeros.split("-");
+
+        for (int i = 0; i <= strArray.length; i++) {
+            intArray[i] = Integer.parseInt(strArray[i]);
+        }
+
+        return intArray;
     }
 }

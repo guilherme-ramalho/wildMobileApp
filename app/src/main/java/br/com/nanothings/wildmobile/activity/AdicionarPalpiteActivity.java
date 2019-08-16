@@ -33,7 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AdicionarPalpiteActivity extends AppCompatActivity {
-    @BindView(R.id.spinnerModalidade) Spinner spinnerModalidade;
+    @BindView(R.id.spinnerTipoPalpite) Spinner spinnerTipoPalpite;
     @BindView(R.id.spinnerInicioCerco) Spinner spinnerInicioCerco;
     @BindView(R.id.spinnerFinalCerco) Spinner spinnerFinalCerco;
     @BindView(R.id.buttonIncluirPalpite) Button buttonIncluirPalpite;
@@ -44,7 +44,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
     private Palpite palpite = new Palpite();
     private Context context;
-    private TipoPalpite palpiteSelecionado;
+    private TipoPalpite tipoPalpite;
     private ModalidadeAposta modalidadeSelcionada;
     private MajoraMask majoraMask = new MajoraMask();
 
@@ -85,7 +85,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         );
 
         adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
-        spinnerModalidade.setAdapter(adapter);
+        spinnerTipoPalpite.setAdapter(adapter);
     }
 
     private void setSpinnersCerco() {
@@ -154,28 +154,30 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     }
 
     private boolean palpiteValido() {
-        String palpites = inputPalpite.getText().toString();
+        String valoresPalpiteStr = inputPalpite.getText().toString();
 
         String mascaraPalpite = majoraMask.getPalpiteMask();
 
-        if(palpites.isEmpty() || palpites.length() != mascaraPalpite.length()) {
+        if(valoresPalpiteStr.isEmpty() || valoresPalpiteStr.length() != mascaraPalpite.length()) {
             Toast.makeText(this, R.string.erro_tamanho_palpite, Toast.LENGTH_SHORT).show();
             
             return false;
         }
 
-        String[] palpitesArray = palpites.split("-");
+        String[] valoresPalpiteArray = valoresPalpiteStr.split("-");
 
-        for(String palpite : palpitesArray) {
-            int palpiteInt = Integer.parseInt(palpite);
-            int valorMinimo = palpiteSelecionado.getValorMinimo();
-            int valorMaximo = palpiteSelecionado.getValorMaximo();
+        for(String valor : valoresPalpiteArray) {
+            int palpiteInt = Integer.parseInt(valor);
+            int valorMinimo = tipoPalpite.getValorMinimo();
+            int valorMaximo = tipoPalpite.getValorMaximo();
 
             if(palpiteInt < valorMinimo || palpiteInt > valorMaximo) {
                 Toast.makeText(this, R.string.erro_valor_palpite, Toast.LENGTH_LONG).show();
                 return false;
             }
         }
+
+        palpite.setNumeros(valoresPalpiteStr);
         
         return true;
     }
@@ -206,16 +208,17 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
         //O valor da aposta está zerado
         if(valorAposta.compareTo(BigDecimal.ZERO) <= 0) {
-            palpite.setValorAposta(valorAposta);
             Toast.makeText(context, R.string.erro_valor_aposta_zerado, Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        palpite.setValorAposta(valorAposta);
 
         return true;
     }
 
     private void spinnerModalidadeChange() {
-        spinnerModalidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerTipoPalpite.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 List<TipoPalpite> listaTipoPalpite = new ArrayList<>();
@@ -224,11 +227,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
                     listaTipoPalpite.addAll(modalidadeAposta.getPalpites());
                 }
 
-                palpiteSelecionado = listaTipoPalpite.get(i);
+                tipoPalpite = listaTipoPalpite.get(i);
 
-                aplicarMascaraPalpite(palpiteSelecionado.getIdModalidadeAposta());
+                aplicarMascaraPalpite(tipoPalpite.getIdModalidadeAposta());
 
-                palpite.setIdTipoPalpite(palpiteSelecionado.getId());
+                palpite.setTipoPalpite(tipoPalpite);
             }
 
             @Override
@@ -274,7 +277,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         }
 
         int qtdInputs = modalidadeSelcionada.getQtdInputs();
-        int qtdDigitos = palpiteSelecionado.getQtdDigitos();
+        int qtdDigitos = tipoPalpite.getQtdDigitos();
 
         String pattern = "";
 
