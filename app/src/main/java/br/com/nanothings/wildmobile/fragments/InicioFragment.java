@@ -32,6 +32,7 @@ import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
 import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
+import br.com.nanothings.wildmobile.model.Aposta;
 import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.model.Sorteio;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
@@ -59,10 +60,9 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
     private List<Sorteio> listaSorteio;
-    private List<Palpite> listaPalpite = new ArrayList<>();
     private PalpiteAdapter palpiteAdapter;
     private ItemTouchHelper.SimpleCallback itemTouchCallback;
-    private BigDecimal valorTotalAposta, valorTotalPremio;
+    private Aposta aposta = new Aposta();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,16 +97,16 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
         Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
 
-        listaPalpite.add(palpite);
-        palpiteAdapter.setData(listaPalpite);
+        aposta.getPalpites().add(palpite);
+        palpiteAdapter.setData(aposta.getPalpites());
 
         calcularTotais();
     }
 
     @Override
     public void deletarPalpite(int position) {
-        Palpite palpite = listaPalpite.get(position);
-        listaPalpite.remove(position);
+        Palpite palpite = aposta.getPalpites().get(position);
+        aposta.getPalpites().remove(position);
         palpiteAdapter.notifyItemRemoved(position);
 
         calcularTotais();
@@ -186,7 +186,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     }
 
     private void setRecyclerPalpites() {
-        palpiteAdapter = new PalpiteAdapter(listaPalpite, this);
+        palpiteAdapter = new PalpiteAdapter(aposta.getPalpites(), this);
 
         recyclerPalpites.setLayoutManager(new LinearLayoutManager(context));
         recyclerPalpites.setHasFixedSize(true);
@@ -220,27 +220,27 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                 .setAction(R.string.desfazer, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listaPalpite.add(position, palpite);
-                        palpiteAdapter.setData(listaPalpite);
+                        aposta.getPalpites().add(position, palpite);
+                        palpiteAdapter.setData(aposta.getPalpites());
                         calcularTotais();
                     }
                 }).show();
     }
 
     private void calcularTotais() {
-        valorTotalAposta = BigDecimal.ZERO;
-        valorTotalPremio = BigDecimal.ZERO;
+        aposta.setValorAposta(BigDecimal.ZERO);
+        aposta.setValorPremio(BigDecimal.ZERO);
 
-        for(Palpite palpite : listaPalpite) {
-            valorTotalAposta = valorTotalAposta.add(palpite.getValorAposta());
+        for(Palpite palpite : aposta.getPalpites()) {
+            aposta.addValorAposta(palpite.getValorAposta());
 
             BigDecimal multiplicadorPalpite = new BigDecimal(palpite.getTipoPalpite().getMultiplicador());
             BigDecimal premioPalpiteAtual = palpite.getValorAposta().multiply(multiplicadorPalpite);
-            valorTotalPremio = valorTotalPremio.add(premioPalpiteAtual);
+            aposta.addPremioPalpite(premioPalpiteAtual);
         }
 
-        valorApostaTextView.setText(Utils.bigDecimalToStr(valorTotalAposta));
-        valorPremioTextView.setText(Utils.bigDecimalToStr(valorTotalPremio));
+        valorApostaTextView.setText(Utils.bigDecimalToStr(aposta.getValorAposta()));
+        valorPremioTextView.setText(Utils.bigDecimalToStr(aposta.getValorPremio()));
     }
 
     private void botaoFinalizarApostaClick() {
@@ -250,5 +250,9 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                 Toast.makeText(context, "Implementando...", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void montarObjetoAposta() {
+
     }
 }
