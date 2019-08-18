@@ -35,32 +35,42 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/palpitesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="00-00-00"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/modalidadeTextView" />
-
-        <TextView
-            android:id="@+id/cercoTextView"
+            android:id="@+id/intervalorPremioTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Do 1º prêmio ao 1º prêmio "
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modalidadeTextView" />
+
+        <TextView
+            android:id="@+id/valorPremioTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="R$ 0,00"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/valorApostaTextView" />
+
+        <TextView
+            android:id="@+id/palpitesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="(00-00-00)"
+            app:layout_constraintBaseline_toBaselineOf="@+id/modalidadeTextView"
+            app:layout_constraintStart_toEndOf="@+id/modalidadeTextView" />
 
         <TextView
             android:id="@+id/multiplicadorTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:text="(1x)"
-            app:layout_constraintBaseline_toBaselineOf="@+id/modalidadeTextView"
-            app:layout_constraintStart_toEndOf="@+id/modalidadeTextView" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/valorApostaTextView"
+            app:layout_constraintEnd_toStartOf="@+id/valorApostaTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

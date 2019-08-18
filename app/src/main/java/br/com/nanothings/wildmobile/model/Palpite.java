@@ -67,7 +67,7 @@ public class Palpite implements Serializable {
         this.sorteio = sorteio;
     }
 
-    public String getTextCerco() {
+    public String getTextIntervaloPremio() {
         return "Do " + this.primeiroPremio + "º prêmio ao " + this.ultimoPremio + "º prêmio";
     }
 

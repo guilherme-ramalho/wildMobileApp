@@ -213,6 +213,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         }
 
         palpite.setValorAposta(valorAposta);
+        BigDecimal multiplicador = new BigDecimal(tipoPalpite.getMultiplicador());
+        palpite.setValorPremio(valorAposta.multiply(multiplicador));
 
         return true;
     }
