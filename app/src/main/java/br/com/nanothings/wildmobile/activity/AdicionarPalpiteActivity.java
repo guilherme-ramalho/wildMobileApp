@@ -34,8 +34,8 @@ import retrofit2.Response;
 
 public class AdicionarPalpiteActivity extends AppCompatActivity {
     @BindView(R.id.spinnerTipoPalpite) Spinner spinnerTipoPalpite;
-    @BindView(R.id.spinnerInicioCerco) Spinner spinnerInicioCerco;
-    @BindView(R.id.spinnerFinalCerco) Spinner spinnerFinalCerco;
+    @BindView(R.id.spinnerPrimeiroPremio) Spinner spinnerPrimeiroPremio;
+    @BindView(R.id.spinnerUltimoPremio) Spinner spinnerUltimoPremio;
     @BindView(R.id.buttonIncluirPalpite) Button buttonIncluirPalpite;
     @BindView(R.id.inputPalpite) EditText inputPalpite;
     @BindView(R.id.inputValorAposta) EditText inputValorAposta;
@@ -58,11 +58,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         listarModalidadesAposta();
-        setSpinnersCerco();
+        setSpinnersPremios();
         buttonIncluirPalpiteClick();
         spinnerModalidadeChange();
-        spinnerInicioCercoChange();
-        spinnerFinalCercoChange();
+        spinnerPrimeiroPremioChange();
+        spinnerUltimoPremioChange();
 
         majoraMask.addCurrencyMask(inputValorAposta);
     }
@@ -88,15 +88,15 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         spinnerTipoPalpite.setAdapter(adapter);
     }
 
-    private void setSpinnersCerco() {
+    private void setSpinnersPremios() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.premios_array, R.layout.custom_simple_spinner_item
         );
 
         adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
 
-        spinnerInicioCerco.setAdapter(adapter);
-        spinnerFinalCerco.setAdapter(adapter);
+        spinnerPrimeiroPremio.setAdapter(adapter);
+        spinnerUltimoPremio.setAdapter(adapter);
     }
 
     private void listarModalidadesAposta() {
@@ -177,13 +177,13 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
             }
         }
 
-        palpite.setNumeros(valoresPalpiteStr);
+        palpite.setNumerosString(valoresPalpiteStr);
         
         return true;
     }
     
     private boolean cercoValido() {
-        if(palpite.getInicioCerco() > palpite.getFinalCerco()) {
+        if(palpite.getPrimeiroPremio() > palpite.getUltimoPremio()) {
             Toast.makeText(context, R.string.cerco_invalido, Toast.LENGTH_SHORT).show();
             
             return false;
@@ -241,11 +241,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         });
     }
 
-    private void spinnerInicioCercoChange() {
-        spinnerInicioCerco.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void spinnerPrimeiroPremioChange() {
+        spinnerPrimeiroPremio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                palpite.setInicioCerco(i+1);
+                palpite.setPrimeiroPremio(i+1);
             }
 
             @Override
@@ -255,11 +255,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         });
     }
 
-    private void spinnerFinalCercoChange() {
-        spinnerFinalCerco.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void spinnerUltimoPremioChange() {
+        spinnerUltimoPremio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                palpite.setFinalCerco(i+1);
+                palpite.setUltimoPremio(i+1);
             }
 
             @Override

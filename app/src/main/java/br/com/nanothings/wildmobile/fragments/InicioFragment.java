@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -30,12 +31,14 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
 import br.com.nanothings.wildmobile.helper.Utils;
+import br.com.nanothings.wildmobile.interfaces.ApostaService;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
 import br.com.nanothings.wildmobile.model.Aposta;
 import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.model.Sorteio;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
+import br.com.nanothings.wildmobile.rest.RestObjResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +62,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
+    private Call<RestObjResponse<Aposta>> requestAposta;
     private List<Sorteio> listaSorteio;
     private PalpiteAdapter palpiteAdapter;
     private ItemTouchHelper.SimpleCallback itemTouchCallback;
@@ -95,9 +99,14 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
+
         Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
 
+        palpite.setSorteio(sorteio);
+
         aposta.getPalpites().add(palpite);
+
         palpiteAdapter.setData(aposta.getPalpites());
 
         calcularTotais();
@@ -247,12 +256,33 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         botaoFinalizarAposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Implementando...", Toast.LENGTH_SHORT).show();
+                cadastrarAposta();
             }
         });
     }
 
-    private void montarObjetoAposta() {
+    private void cadastrarAposta() {
+        try {
+            ApostaService apostaService = new RestRequest(context).getService(ApostaService.class);
 
+            if(requestAposta != null) requestAposta.cancel();
+
+            requestAposta = apostaService.cadastrarAposta(aposta);
+            requestAposta.enqueue(new Callback<RestObjResponse<Aposta>>() {
+                @Override
+                public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {
+                    Toast.makeText(context, "Sucesso!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<RestObjResponse<Aposta>> call, Throwable t) {
+                    Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        } catch(Exception e) {
+            Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }

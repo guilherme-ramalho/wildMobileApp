@@ -42,7 +42,7 @@ public class PalpiteAdapter extends RecyclerView.Adapter<PalpiteViewHolder> {
     public void onBindViewHolder(@NonNull PalpiteViewHolder holder, int position) {
         Palpite palpite = listaPalpites.get(position);
 
-        holder.palpitesTexView.setText(palpite.getNumeros());
+        holder.palpitesTexView.setText(palpite.getNumerosString());
         holder.cercoTextView.setText(palpite.getTextCerco());
         holder.valorApostaTextView.setText(Utils.bigDecimalToStr(palpite.getValorAposta()));
         holder.modalidadeTextView.setText(palpite.getTipoPalpite().getNome());
