@@ -256,7 +256,11 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         botaoFinalizarAposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cadastrarAposta();
+                if(aposta.getPalpites().size() > 0) {
+                    cadastrarAposta();
+                } else {
+                    Toast.makeText(context, R.string.sem_palpite, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

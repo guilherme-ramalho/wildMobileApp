@@ -61,6 +61,7 @@ public class RestRequest {
 
                         Request newRequest = originalRequest.newBuilder()
                                 .header("token", token)
+                                .header("idCambista", String.valueOf(cambista.getId()))
                                 .method(originalRequest.method(), originalRequest.body())
                                 .build();
 
