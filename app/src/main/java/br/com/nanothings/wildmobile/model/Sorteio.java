@@ -1,8 +1,9 @@
 package br.com.nanothings.wildmobile.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Sorteio {
+public class Sorteio implements Serializable {
     private int id;
     private String status, data;
     private Date dataOriginal;

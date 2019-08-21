@@ -4,39 +4,45 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Palpite implements Serializable {
-    private int inicioCerco, finalCerco;
-    private String numeros;
-    private BigDecimal valorAposta;
+    private int[] numerosArray;
+    private int primeiroPremio, ultimoPremio;
+    private String numerosString;
+    private BigDecimal valorAposta, valorPremio;
     private TipoPalpite tipoPalpite;
+    private Sorteio sorteio;
 
     public Palpite() {
         this.valorAposta = BigDecimal.ZERO;
-        this.inicioCerco = 1;
-        this.finalCerco = 1;
+        this.valorPremio = BigDecimal.ZERO;
+        this.primeiroPremio = 1;
+        this.ultimoPremio = 1;
+        this.tipoPalpite = new TipoPalpite();
+        this.tipoPalpite.setId(1);
     }
 
-    public int getInicioCerco() {
-        return inicioCerco;
+    public int getPrimeiroPremio() {
+        return primeiroPremio;
     }
 
-    public void setInicioCerco(int inicioCerco) {
-        this.inicioCerco = inicioCerco;
+    public void setPrimeiroPremio(int primeiroPremio) {
+        this.primeiroPremio = primeiroPremio;
     }
 
-    public int getFinalCerco() {
-        return finalCerco;
+    public int getUltimoPremio() {
+        return ultimoPremio;
     }
 
-    public void setFinalCerco(int finalCerco) {
-        this.finalCerco = finalCerco;
+    public void setUltimoPremio(int ultimoPremio) {
+        this.ultimoPremio = ultimoPremio;
     }
 
-    public String getNumeros() {
-        return numeros;
+    public String getNumerosString() {
+        return numerosString;
     }
 
-    public void setNumeros(String numeros) {
-        this.numeros = numeros;
+    public void setNumerosString(String numerosString) {
+        this.numerosString = numerosString;
+        setNumerosArray();
     }
 
     public BigDecimal getValorAposta() {
@@ -55,18 +61,36 @@ public class Palpite implements Serializable {
         this.tipoPalpite = tipoPalpite;
     }
 
-    public String getTextCerco() {
-        return "Do " + this.inicioCerco + "º prêmio ao " + this.finalCerco + "º prêmio";
+    public Sorteio getSorteio() {
+        return sorteio;
     }
 
-    public int[] getNumeroArray() {
-        int[] intArray = new int[]{};
-        String[] strArray = this.numeros.split("-");
+    public void setSorteio(Sorteio sorteio) {
+        this.sorteio = sorteio;
+    }
 
-        for (int i = 0; i <= strArray.length; i++) {
-            intArray[i] = Integer.parseInt(strArray[i]);
+    public String getTextIntervaloPremio() {
+        return "Do " + this.primeiroPremio + "º prêmio ao " + this.ultimoPremio + "º prêmio";
+    }
+
+    public int[] getNumerosArray() {
+        return numerosArray;
+    }
+
+    public void setNumerosArray() {
+        String[] strArray = numerosString.split("-");
+        numerosArray = new int[strArray.length];
+
+        for (int i = 0 ; i < strArray.length ; i++){
+            numerosArray[i] = Integer.parseInt(strArray[i]);
         }
+    }
 
-        return intArray;
+    public BigDecimal getValorPremio() {
+        return valorPremio;
+    }
+
+    public void setValorPremio(BigDecimal valorPremio) {
+        this.valorPremio = valorPremio;
     }
 }

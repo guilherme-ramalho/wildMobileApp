@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,35 +31,34 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
 import br.com.nanothings.wildmobile.helper.Utils;
+import br.com.nanothings.wildmobile.interfaces.ApostaService;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
 import br.com.nanothings.wildmobile.model.Aposta;
 import br.com.nanothings.wildmobile.model.Palpite;
 import br.com.nanothings.wildmobile.model.Sorteio;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
+import br.com.nanothings.wildmobile.rest.RestObjResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InicioFragment extends Fragment implements PalpiteItemManager {
-    @BindView(R.id.spinnerSorteio)
-    Spinner spinnerSorteio;
-    @BindView(R.id.buttonAdicionarPalpite)
-    Button buttonAdicionarPalpite;
-    @BindView(R.id.recyclerPalpites)
-    RecyclerView recyclerPalpites;
-    @BindView(R.id.valorApostaTextView)
-    TextView valorApostaTextView;
-    @BindView(R.id.valorPremioTextView)
-    TextView valorPremioTextView;
-    @BindView(R.id.botaoFinalizarAposta)
-    Button botaoFinalizarAposta;
+    @BindView(R.id.spinnerSorteio) Spinner spinnerSorteio;
+    @BindView(R.id.botaoAdicionarPalpite) Button buttonAdicionarPalpite;
+    @BindView(R.id.recyclerPalpites) RecyclerView recyclerPalpites;
+    @BindView(R.id.valorApostaTextView) TextView valorApostaTextView;
+    @BindView(R.id.valorPremioTextView) TextView valorPremioTextView;
+    @BindView(R.id.botaoFinalizarAposta) Button botaoFinalizarAposta;
+    @BindView(R.id.inputNomeApostador) EditText inputNomeApostador;
 
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
+    private Call<RestObjResponse<Aposta>> requestAposta;
     private List<Sorteio> listaSorteio;
     private PalpiteAdapter palpiteAdapter;
     private ItemTouchHelper.SimpleCallback itemTouchCallback;
@@ -85,19 +85,22 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         ButterKnife.bind(this, view);
 
         listarSorteios();
-        adicionarPalpiteClick();
         setPalpiteSwipe();
         setRecyclerPalpites();
-        botaoFinalizarApostaClick();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
+
         Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
 
+        palpite.setSorteio(sorteio);
+
         aposta.getPalpites().add(palpite);
+
         palpiteAdapter.setData(aposta.getPalpites());
 
         calcularTotais();
@@ -116,21 +119,22 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     @Override
     public void editarPalpite(int position) {
+        Palpite palpite = aposta.getPalpites().get(position);
 
+        Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
+        intent.putExtra("PalpiteEdicao", palpite);
+
+        startActivityForResult(intent, 1);
     }
 
-    private void adicionarPalpiteClick() {
-        buttonAdicionarPalpite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(spinnerSorteio.getSelectedItem() != null) {
-                    Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
-                    startActivityForResult(intent, 1);
-                } else {
-                    Toast.makeText(context, R.string.sorteio_constraint, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    @OnClick(R.id.botaoAdicionarPalpite)
+    void adicionarPalpiteClick() {
+        if(spinnerSorteio.getSelectedItem() != null) {
+            Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
+            startActivityForResult(intent, 1);
+        } else {
+            Toast.makeText(context, R.string.sorteio_constraint, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void listarSorteios() {
@@ -243,16 +247,53 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         valorPremioTextView.setText(Utils.bigDecimalToStr(aposta.getValorPremio()));
     }
 
-    private void botaoFinalizarApostaClick() {
-        botaoFinalizarAposta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Implementando...", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private boolean nomeApostadorValido() {
+        String nomeApostador = inputNomeApostador.getText().toString();
+
+        if(nomeApostador.isEmpty()) {
+            Toast.makeText(context, R.string.sem_nome_apostador, Toast.LENGTH_SHORT).show();
+
+            return false;
+        } else {
+            aposta.setNomeApostador(nomeApostador);
+
+            return true;
+        }
     }
 
-    private void montarObjetoAposta() {
+    @OnClick(R.id.botaoFinalizarAposta)
+    void botaoFinalizarApostaClick() {
+        if(!nomeApostadorValido()) return;
 
+        if(aposta.getPalpites().size() > 0) {
+            cadastrarAposta();
+        } else {
+            Toast.makeText(context, R.string.sem_palpite, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void cadastrarAposta() {
+        try {
+            ApostaService apostaService = new RestRequest(context).getService(ApostaService.class);
+
+            if(requestAposta != null) requestAposta.cancel();
+
+            requestAposta = apostaService.cadastrarAposta(aposta);
+            requestAposta.enqueue(new Callback<RestObjResponse<Aposta>>() {
+                @Override
+                public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {
+                    Toast.makeText(context, "Sucesso!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<RestObjResponse<Aposta>> call, Throwable t) {
+                    Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        } catch(Exception e) {
+            Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }
