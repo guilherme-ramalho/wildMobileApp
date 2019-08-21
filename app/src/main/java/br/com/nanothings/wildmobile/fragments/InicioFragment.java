@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +42,7 @@ import br.com.nanothings.wildmobile.rest.RestObjResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,7 +50,7 @@ import retrofit2.Response;
 public class InicioFragment extends Fragment implements PalpiteItemManager {
     @BindView(R.id.spinnerSorteio)
     Spinner spinnerSorteio;
-    @BindView(R.id.buttonAdicionarPalpite)
+    @BindView(R.id.botaoAdicionarPalpite)
     Button buttonAdicionarPalpite;
     @BindView(R.id.recyclerPalpites)
     RecyclerView recyclerPalpites;
@@ -59,6 +60,8 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     TextView valorPremioTextView;
     @BindView(R.id.botaoFinalizarAposta)
     Button botaoFinalizarAposta;
+    @BindView(R.id.inputNomeApostador)
+    EditText inputNomeApostador;
 
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;
@@ -89,10 +92,8 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         ButterKnife.bind(this, view);
 
         listarSorteios();
-        adicionarPalpiteClick();
         setPalpiteSwipe();
         setRecyclerPalpites();
-        botaoFinalizarApostaClick();
     }
 
     @Override
@@ -128,18 +129,15 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     }
 
-    private void adicionarPalpiteClick() {
-        buttonAdicionarPalpite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(spinnerSorteio.getSelectedItem() != null) {
-                    Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
-                    startActivityForResult(intent, 1);
-                } else {
-                    Toast.makeText(context, R.string.sorteio_constraint, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+    @OnClick(R.id.botaoAdicionarPalpite)
+    void adicionarPalpiteClick() {
+        if(spinnerSorteio.getSelectedItem() != null) {
+            Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
+            startActivityForResult(intent, 1);
+        } else {
+            Toast.makeText(context, R.string.sorteio_constraint, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void listarSorteios() {
@@ -252,17 +250,29 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         valorPremioTextView.setText(Utils.bigDecimalToStr(aposta.getValorPremio()));
     }
 
-    private void botaoFinalizarApostaClick() {
-        botaoFinalizarAposta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(aposta.getPalpites().size() > 0) {
-                    cadastrarAposta();
-                } else {
-                    Toast.makeText(context, R.string.sem_palpite, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    private boolean nomeApostadorValido() {
+        String nomeApostador = inputNomeApostador.getText().toString();
+
+        if(nomeApostador.isEmpty()) {
+            Toast.makeText(context, R.string.sem_nome_apostador, Toast.LENGTH_SHORT).show();
+
+            return false;
+        } else {
+            aposta.setNomeApostador(nomeApostador);
+
+            return true;
+        }
+    }
+
+    @OnClick(R.id.botaoFinalizarAposta)
+    void botaoFinalizarApostaClick() {
+        if(!nomeApostadorValido()) return;
+
+        if(aposta.getPalpites().size() > 0) {
+            cadastrarAposta();
+        } else {
+            Toast.makeText(context, R.string.sem_palpite, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cadastrarAposta() {
