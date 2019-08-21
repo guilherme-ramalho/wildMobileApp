@@ -48,20 +48,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InicioFragment extends Fragment implements PalpiteItemManager {
-    @BindView(R.id.spinnerSorteio)
-    Spinner spinnerSorteio;
-    @BindView(R.id.botaoAdicionarPalpite)
-    Button buttonAdicionarPalpite;
-    @BindView(R.id.recyclerPalpites)
-    RecyclerView recyclerPalpites;
-    @BindView(R.id.valorApostaTextView)
-    TextView valorApostaTextView;
-    @BindView(R.id.valorPremioTextView)
-    TextView valorPremioTextView;
-    @BindView(R.id.botaoFinalizarAposta)
-    Button botaoFinalizarAposta;
-    @BindView(R.id.inputNomeApostador)
-    EditText inputNomeApostador;
+    @BindView(R.id.spinnerSorteio) Spinner spinnerSorteio;
+    @BindView(R.id.botaoAdicionarPalpite) Button buttonAdicionarPalpite;
+    @BindView(R.id.recyclerPalpites) RecyclerView recyclerPalpites;
+    @BindView(R.id.valorApostaTextView) TextView valorApostaTextView;
+    @BindView(R.id.valorPremioTextView) TextView valorPremioTextView;
+    @BindView(R.id.botaoFinalizarAposta) Button botaoFinalizarAposta;
+    @BindView(R.id.inputNomeApostador) EditText inputNomeApostador;
 
     private Context context;
     private Call<RestListResponse<Sorteio>> requestSorteio;

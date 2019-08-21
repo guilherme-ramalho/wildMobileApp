@@ -57,7 +57,6 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        verificarIntentExtra();
         listarModalidadesAposta();
         setSpinnersPremios();
         buttonIncluirPalpiteClick();
@@ -66,11 +65,12 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         spinnerUltimoPremioChange();
 
         majoraMask.addCurrencyMask(inputValorAposta);
+
+        verificarIntentExtra();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         //Do nothing
     }
 
@@ -82,7 +82,6 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
             inputValorAposta.setText(palpite.getValorAposta().toString());
             spinnerPrimeiroPremio.setSelection(palpite.getPrimeiroPremio() - 1);
             spinnerUltimoPremio.setSelection(palpite.getUltimoPremio() - 1);
-            spinnerTipoPalpite.setSelection(palpite.getTipoPalpite().getId() - 1);
         } else {
             palpite = new Palpite();
         }
@@ -101,6 +100,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
         adapter.setDropDownViewResource(R.layout.custom_simple_spinner_dropdown_item);
         spinnerTipoPalpite.setAdapter(adapter);
+
+        spinnerTipoPalpite.setSelection(palpite.getTipoPalpite().getId() - 1);
     }
 
     private void setSpinnersPremios() {
@@ -169,30 +170,39 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     }
 
     private boolean palpiteValido() {
-        String valoresPalpiteStr = inputPalpite.getText().toString();
+        String numerosPalpiteStr = inputPalpite.getText().toString();
 
         String mascaraPalpite = majoraMask.getPalpiteMask();
 
-        if(valoresPalpiteStr.isEmpty() || valoresPalpiteStr.length() != mascaraPalpite.length()) {
+        if(numerosPalpiteStr.isEmpty() || numerosPalpiteStr.length() != mascaraPalpite.length()) {
             Toast.makeText(this, R.string.erro_tamanho_palpite, Toast.LENGTH_SHORT).show();
             
             return false;
         }
 
-        String[] valoresPalpiteArray = valoresPalpiteStr.split("-");
+        String[] numerosPalpiteArr = numerosPalpiteStr.split("-");
 
-        for(String valor : valoresPalpiteArray) {
-            int palpiteInt = Integer.parseInt(valor);
-            int valorMinimo = tipoPalpite.getValorMinimo();
-            int valorMaximo = tipoPalpite.getValorMaximo();
+        for(int i = 0 ; i < numerosPalpiteArr.length ; i++) {
+            int numeroPalpite = Integer.parseInt(numerosPalpiteArr[i]);
+            int numeroMinimo = tipoPalpite.getValorMinimo();
+            int numeroMaximo = tipoPalpite.getValorMaximo();
 
-            if(palpiteInt < valorMinimo || palpiteInt > valorMaximo) {
+            //Verifica se o número está dentro do intervalo permitido
+            if(numeroPalpite < numeroMinimo || numeroPalpite > numeroMaximo) {
                 Toast.makeText(this, R.string.erro_valor_palpite, Toast.LENGTH_LONG).show();
                 return false;
             }
+
+            //Verifica se algum dos números do palpite está repetido
+            for(int k = i + 1 ; k < numerosPalpiteArr.length ; k++) {
+                if(numerosPalpiteArr[k].equals(numerosPalpiteArr[i])) {
+                    Toast.makeText(context, "Números repetidos no palpite", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
         }
 
-        palpite.setNumerosString(valoresPalpiteStr);
+        palpite.setNumerosString(numerosPalpiteStr);
         
         return true;
     }

@@ -16,6 +16,8 @@ public class Palpite implements Serializable {
         this.valorPremio = BigDecimal.ZERO;
         this.primeiroPremio = 1;
         this.ultimoPremio = 1;
+        this.tipoPalpite = new TipoPalpite();
+        this.tipoPalpite.setId(1);
     }
 
     public int getPrimeiroPremio() {
