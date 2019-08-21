@@ -28,5 +28,16 @@ public class PalpiteViewHolder extends RecyclerView.ViewHolder {
         valorPremioTextView = itemView.findViewById(R.id.valorPremioTextView);
 
         this.palpiteItemManager = palpiteItemManager;
+
+        palpiteItemClick();
+    }
+
+    private void palpiteItemClick() {
+        palpiteLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                palpiteItemManager.editarPalpite(getAdapterPosition());
+            }
+        });
     }
 }

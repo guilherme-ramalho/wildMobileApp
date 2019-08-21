@@ -126,9 +126,13 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     @Override
     public void editarPalpite(int position) {
+        Palpite palpite = aposta.getPalpites().get(position);
 
+        Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
+        intent.putExtra("PalpiteEdicao", palpite);
+
+        startActivityForResult(intent, 1);
     }
-
 
     @OnClick(R.id.botaoAdicionarPalpite)
     void adicionarPalpiteClick() {

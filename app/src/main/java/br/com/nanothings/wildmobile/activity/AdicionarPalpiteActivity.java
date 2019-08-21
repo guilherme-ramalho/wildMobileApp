@@ -42,7 +42,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
     private List<ModalidadeAposta> listaModalidadeAposta;
     private Call<RestListResponse<ModalidadeAposta>> requestModalidades;
-    private Palpite palpite = new Palpite();
+    private Palpite palpite;
     private Context context;
     private TipoPalpite tipoPalpite;
     private ModalidadeAposta modalidadeSelcionada;
@@ -57,6 +57,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        verificarIntentExtra();
         listarModalidadesAposta();
         setSpinnersPremios();
         buttonIncluirPalpiteClick();
@@ -71,6 +72,20 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         //Do nothing
+    }
+
+    private void verificarIntentExtra() {
+        palpite = (Palpite) getIntent().getSerializableExtra("PalpiteEdicao");
+
+        if(palpite != null) {
+            inputPalpite.setText(palpite.getNumerosString());
+            inputValorAposta.setText(palpite.getValorAposta().toString());
+            spinnerPrimeiroPremio.setSelection(palpite.getPrimeiroPremio() - 1);
+            spinnerUltimoPremio.setSelection(palpite.getUltimoPremio() - 1);
+            spinnerTipoPalpite.setSelection(palpite.getTipoPalpite().getId() - 1);
+        } else {
+            palpite = new Palpite();
+        }
     }
 
     private void setSpinnerModalidade() {
