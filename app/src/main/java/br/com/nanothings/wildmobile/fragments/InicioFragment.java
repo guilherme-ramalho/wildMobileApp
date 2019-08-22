@@ -30,6 +30,7 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
+import br.com.nanothings.wildmobile.activity.MainActivity;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
 import br.com.nanothings.wildmobile.helper.ProgressLoader;
 import br.com.nanothings.wildmobile.helper.Utils;
@@ -299,7 +300,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                 .setNegativeButton(R.string.voltar, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        getActivity().recreate();
+                                        reciclarActicity();
                                     }
                                 })
                                 .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
@@ -309,7 +310,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
                                         Toast.makeText(context, "Imprimindo...", Toast.LENGTH_SHORT).show();
 
-                                        getActivity().recreate();
+                                        reciclarActicity();
                                     }
                                 }).create().show();
                     } else {
@@ -331,5 +332,9 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
             progressLoader.showLoader(false);
             Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void reciclarActicity() {
+        startActivity(new Intent(getActivity(), MainActivity.class));
     }
 }
