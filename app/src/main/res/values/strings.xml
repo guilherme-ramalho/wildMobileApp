@@ -31,6 +31,9 @@
     <string name="sem_palpite">Nenhum palpite selecionado</string>
     <string name="sem_nome_apostador">Por favor, informe o nome do apostador</string>
     <string name="numero_palpite_repetido">Os números dos palpites não podem se repetir</string>
+    <string name="aposta_cadastrada">Aposta cadastrada! O que deseja fazer agora?</string>
+    <string name="imprimir">Imprimir</string>
+    <string name="voltar">Voltar</string>
 
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>
