@@ -292,19 +292,33 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                 public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {
                     progressLoader.showLoader(false);
 
-                    Utils.getDialogBuilder(getActivity(), getString(R.string.aposta_cadastrada))
-                            .setNegativeButton(R.string.voltar, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                    RestObjResponse<Aposta> resposta = response.body();
 
-                                }
-                            })
-                            .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Toast.makeText(context, "Imprimindo...", Toast.LENGTH_SHORT).show();
-                                }
-                            }).create().show();
+                    if(response.isSuccessful() && resposta.meta.status.equals("success")) {
+                        Utils.getDialogBuilder(getActivity(), getString(R.string.aposta_cadastrada))
+                                .setNegativeButton(R.string.voltar, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        getActivity().recreate();
+                                    }
+                                })
+                                .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Aposta aposta = response.body().data;
+
+                                        Toast.makeText(context, "Imprimindo...", Toast.LENGTH_SHORT).show();
+
+                                        getActivity().recreate();
+                                    }
+                                }).create().show();
+                    } else {
+                        String msg = !resposta.meta.mensagem.isEmpty() ?
+                                resposta.meta.mensagem :
+                                getResources().getString(R.string.erro_cadastro_aposta);
+
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override

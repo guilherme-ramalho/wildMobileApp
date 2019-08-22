@@ -32,6 +32,7 @@
     <string name="sem_nome_apostador">Por favor, informe o nome do apostador</string>
     <string name="numero_palpite_repetido">Os números dos palpites não podem se repetir</string>
     <string name="aposta_cadastrada">Aposta cadastrada! O que deseja fazer agora?</string>
+    <string name="erro_cadastro_aposta">Erro ao cadastrar aposta.</string>
     <string name="imprimir">Imprimir</string>
     <string name="voltar">Voltar</string>
 
