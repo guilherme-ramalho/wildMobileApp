@@ -1,6 +1,7 @@
 package br.com.nanothings.wildmobile.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +30,9 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
+import br.com.nanothings.wildmobile.activity.MainActivity;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
+import br.com.nanothings.wildmobile.helper.ProgressLoader;
 import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.ApostaService;
 import br.com.nanothings.wildmobile.interfaces.PalpiteItemManager;
@@ -63,6 +66,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     private PalpiteAdapter palpiteAdapter;
     private ItemTouchHelper.SimpleCallback itemTouchCallback;
     private Aposta aposta = new Aposta();
+    private ProgressLoader progressLoader;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +91,9 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         listarSorteios();
         setPalpiteSwipe();
         setRecyclerPalpites();
+
+        progressLoader = new ProgressLoader(getActivity());
+        progressLoader.setLoader();
     }
 
     @Override
@@ -274,6 +281,8 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     private void cadastrarAposta() {
         try {
+            progressLoader.showLoader(true);
+
             ApostaService apostaService = new RestRequest(context).getService(ApostaService.class);
 
             if(requestAposta != null) requestAposta.cancel();
@@ -282,18 +291,50 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
             requestAposta.enqueue(new Callback<RestObjResponse<Aposta>>() {
                 @Override
                 public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {
-                    Toast.makeText(context, "Sucesso!", Toast.LENGTH_SHORT).show();
+                    progressLoader.showLoader(false);
+
+                    RestObjResponse<Aposta> resposta = response.body();
+
+                    if(response.isSuccessful() && resposta.meta.status.equals("success")) {
+                        Utils.getDialogBuilder(getActivity(), getString(R.string.aposta_cadastrada))
+                                .setNegativeButton(R.string.voltar, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        reciclarActicity();
+                                    }
+                                })
+                                .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Aposta aposta = response.body().data;
+
+                                        Toast.makeText(context, "Imprimindo...", Toast.LENGTH_SHORT).show();
+
+                                        reciclarActicity();
+                                    }
+                                }).create().show();
+                    } else {
+                        String msg = !resposta.meta.mensagem.isEmpty() ?
+                                resposta.meta.mensagem :
+                                getResources().getString(R.string.erro_cadastro_aposta);
+
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<RestObjResponse<Aposta>> call, Throwable t) {
+                    progressLoader.showLoader(false);
                     Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
                 }
             });
-
-
         } catch(Exception e) {
+            progressLoader.showLoader(false);
             Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void reciclarActicity() {
+        startActivity(new Intent(getActivity(), MainActivity.class));
     }
 }

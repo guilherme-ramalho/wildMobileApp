@@ -159,9 +159,9 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
     }
 
     private void retornarPalpite() {
-        if(!valorApostaValido()) return;
-        if(!cercoValido()) return;
         if(!palpiteValido()) return;
+        if(!valorApostaValido()) return;
+        if(!premiosSelecionadosValidos()) return;
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("palpite", palpite);
@@ -207,10 +207,21 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
         return true;
     }
     
-    private boolean cercoValido() {
+    private boolean premiosSelecionadosValidos() {
         if(palpite.getPrimeiroPremio() > palpite.getUltimoPremio()) {
-            Toast.makeText(context, R.string.cerco_invalido, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.erro_intervalo_premio, Toast.LENGTH_LONG).show();
             
+            return false;
+        }
+
+        if(palpite.getUltimoPremio() - palpite.getPrimeiroPremio() < tipoPalpite.getQtdDigitos()) {
+            String mensagem = getString(
+                    R.string.erro_quantidade_premio,
+                    String.valueOf(tipoPalpite.getQtdDigitos())
+            );
+
+            Toast.makeText(context, mensagem, Toast.LENGTH_LONG).show();
+
             return false;
         }
         

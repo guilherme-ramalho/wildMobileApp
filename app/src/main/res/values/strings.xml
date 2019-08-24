@@ -22,7 +22,8 @@
     <!--INÍCIO FRAGMENT-->
     <string name="sorteio_constraint">Para adicionar um palpite é necessário selecionar um sorteio.</string>
     <string name="aposta_vazia">Por favor, informe o valor da aposta.</string>
-    <string name="cerco_invalido">O intervalo de prêmio inicial não pode ser maior que o final.</string>
+    <string name="erro_intervalo_premio">O intervalo de prêmio inicial não pode ser maior que o final.</string>
+    <string name="erro_quantidade_premio">Deve haver uma diferença de, pelo menos, %1$s prêmios para o palpite selecionado</string>
     <string name="erro_tamanho_palpite">O palpite está vazio ou ainda não foi informado completamente.</string>
     <string name="erro_valor_palpite">Valor do palpite inválido. Verifique se algum número excedeu o valor do grupo ou o máximo permitido.</string>
     <string name="erro_valor_aposta_zerado">O valor da aposta deve ser maior que zero</string>
@@ -31,6 +32,10 @@
     <string name="sem_palpite">Nenhum palpite selecionado</string>
     <string name="sem_nome_apostador">Por favor, informe o nome do apostador</string>
     <string name="numero_palpite_repetido">Os números dos palpites não podem se repetir</string>
+    <string name="aposta_cadastrada">Aposta cadastrada! O que deseja fazer agora?</string>
+    <string name="erro_cadastro_aposta">Erro ao cadastrar aposta.</string>
+    <string name="imprimir">Imprimir</string>
+    <string name="voltar">Voltar</string>
 
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>
