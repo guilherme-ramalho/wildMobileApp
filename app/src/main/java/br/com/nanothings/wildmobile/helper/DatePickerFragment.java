@@ -1,6 +1,5 @@
 package br.com.nanothings.wildmobile.helper;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import br.com.nanothings.wildmobile.R;
 

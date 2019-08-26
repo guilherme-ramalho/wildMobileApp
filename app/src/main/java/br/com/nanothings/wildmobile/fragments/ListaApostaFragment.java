@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -44,6 +45,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.dataInicialEditText) EditText dataInicialEditText;
     @BindView(R.id.dataFinalEditText) EditText dataFinalEditText;
+    @BindView(R.id.botaoPesquisarApostas) Button botaoPesquisarAposta;
 
     private Context context;
     private ListaApostaAdapter listaApostaAdapter;
@@ -163,6 +165,15 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
         dataInicialEditText.setText(dateFormat.format(dataInicial));
         dataFinalEditText.setText(dateFormat.format(dataFinal));
+    }
+
+    private void pesquisarApostasClick() {
+        botaoPesquisarAposta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Pesquisando...", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
