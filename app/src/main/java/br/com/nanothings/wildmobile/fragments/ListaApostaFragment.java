@@ -55,7 +55,11 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     private Date dataInicial = Calendar.getInstance().getTime();
     private Date dataFinal = dataInicial;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    private int dialogClicado = 0;
+    private static final int PICKER_DATA_INICIAL = 0;
+    private static final int PICKER_DATA_FINAL = 1;
+    private int pickerSelecionado = 0;
+    private int paginaSelecionada = 1;
+    private String dataInicialStr, dataFinalStr;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,7 +114,9 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
             if (requestAposta != null) requestAposta.cancel();
 
-            requestAposta = apostaService.listar(1);
+            formatarStringsData();
+
+            requestAposta = apostaService.listar(dataInicialStr, dataFinalStr, paginaSelecionada);
             requestAposta.enqueue(new Callback<RestListResponse<Aposta>>() {
                 @Override
                 public void onResponse(Call<RestListResponse<Aposta>> call, Response<RestListResponse<Aposta>> response) {
@@ -141,11 +147,23 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         }
     }
 
+    private void formatarStringsData() {
+        SimpleDateFormat usDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        dataInicialStr = usDateFormat.format(dataInicial);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dataFinal);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        dataFinalStr = usDateFormat.format(calendar.getTime());
+    }
+
     private void inputDataInicialClick() {
         dataInicialEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogClicado = 0;
+                pickerSelecionado = 0;
                 DialogFragment dataInicialPicker = new DatePickerFragment(dateSetListener);
                 dataInicialPicker.show(getFragmentManager(), "InicioDatePicker");
             }
@@ -156,7 +174,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         dataFinalEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogClicado = 1;
+                pickerSelecionado = 1;
                 DialogFragment dataFinalPicker = new DatePickerFragment(dateSetListener);
                 dataFinalPicker.show(getFragmentManager(), "FinalDatePicker");
             }
@@ -175,7 +193,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         botaoPesquisarAposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Pesquisando...", Toast.LENGTH_SHORT).show();
+                listarApostas();
             }
         });
     }
@@ -192,13 +210,13 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         Date dataSelecioanda = calendar.getTime();
         String dataFormatada = dateFormat.format(dataSelecioanda);
 
-        switch (dialogClicado) {
-            case 0:
+        switch (pickerSelecionado) {
+            case PICKER_DATA_INICIAL:
                 dataInicial = dataSelecioanda;
                 dataInicialEditText.setText(dataFormatada);
                 break;
 
-            case 1:
+            case PICKER_DATA_FINAL:
                 dataFinal = dataSelecioanda;
                 dataFinalEditText.setText(dataFormatada);
                 break;
