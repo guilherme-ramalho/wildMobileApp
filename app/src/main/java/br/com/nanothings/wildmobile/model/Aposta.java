@@ -1,5 +1,7 @@
 package br.com.nanothings.wildmobile.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,7 +12,8 @@ public class Aposta implements Serializable {
     private int id;
     private String codigo, status, nomeApostador;
     private BigDecimal valorAposta, valorPremio, valorComissao;
-    private Date criado, modificado;
+    @SerializedName("dataOriginal")
+    private Date data;
     private List<Palpite> palpites;
 
     public Aposta() {
@@ -76,20 +79,12 @@ public class Aposta implements Serializable {
         this.valorComissao = valorComissao;
     }
 
-    public Date getCriado() {
-        return criado;
+    public Date getData() {
+        return data;
     }
 
-    public void setCriado(Date criado) {
-        this.criado = criado;
-    }
-
-    public Date getModificado() {
-        return modificado;
-    }
-
-    public void setModificado(Date modificado) {
-        this.modificado = modificado;
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public List<Palpite> getPalpites() {

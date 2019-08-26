@@ -14,5 +14,5 @@ public interface ApostaService {
     Call<RestObjResponse<Aposta>> cadastrarAposta(@Body Aposta aposta);
 
     @GET("/aposta/listar")
-    Call<RestListResponse<Aposta>> listar(@Query("pagina") String pagina);
+    Call<RestListResponse<Aposta>> listar(@Query("pagina") int pagina);
 }
