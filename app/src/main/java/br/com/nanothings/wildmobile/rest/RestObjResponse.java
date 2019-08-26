@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class    RestObjResponse<T> implements Serializable {
+public class RestObjResponse<T> implements Serializable {
     @Expose
     public T data;
 
