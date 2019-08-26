@@ -55,6 +55,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     private Date dataInicial = Calendar.getInstance().getTime();
     private Date dataFinal = dataInicial;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private int dialogClicado = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         inputDataFinalClick();
         setRecyclerListaApostas();
         listarApostas();
+        pesquisarApostasClick();
     }
 
     private void setRecyclerListaApostas() {
@@ -143,6 +145,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         dataInicialEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialogClicado = 0;
                 DialogFragment dataInicialPicker = new DatePickerFragment(dateSetListener);
                 dataInicialPicker.show(getFragmentManager(), "InicioDatePicker");
             }
@@ -153,6 +156,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         dataFinalEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialogClicado = 1;
                 DialogFragment dataFinalPicker = new DatePickerFragment(dateSetListener);
                 dataFinalPicker.show(getFragmentManager(), "FinalDatePicker");
             }
@@ -183,6 +187,21 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        Toast.makeText(context, "Data alterada", Toast.LENGTH_SHORT).show();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth, 0, 0);
+        Date dataSelecioanda = calendar.getTime();
+        String dataFormatada = dateFormat.format(dataSelecioanda);
+
+        switch (dialogClicado) {
+            case 0:
+                dataInicial = dataSelecioanda;
+                dataInicialEditText.setText(dataFormatada);
+                break;
+
+            case 1:
+                dataFinal = dataSelecioanda;
+                dataFinalEditText.setText(dataFormatada);
+                break;
+        }
     }
 }
