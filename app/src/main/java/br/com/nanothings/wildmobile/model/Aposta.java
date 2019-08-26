@@ -8,6 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import br.com.nanothings.wildmobile.helper.Constants;
 
 public class Aposta implements Serializable {
     private int id;
@@ -105,8 +109,9 @@ public class Aposta implements Serializable {
     }
 
     public String getDataFormatada() {
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy hh:mm");
+        SimpleDateFormat dateFormat = Constants.DATE_FORMAT;
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
 
-        return format.format(this.data);
+        return dateFormat.format(this.data);
     }
 }
