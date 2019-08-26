@@ -1,15 +1,19 @@
 package br.com.nanothings.wildmobile.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +24,7 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.adapter.ListaApostaAdapter;
+import br.com.nanothings.wildmobile.helper.DatePickerFragment;
 import br.com.nanothings.wildmobile.interfaces.ApostaItemManager;
 import br.com.nanothings.wildmobile.interfaces.ApostaService;
 import br.com.nanothings.wildmobile.model.Aposta;
@@ -31,14 +36,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListaApostaFragment extends Fragment implements ApostaItemManager {
+public class ListaApostaFragment extends Fragment implements ApostaItemManager, DatePickerDialog.OnDateSetListener {
     @BindView(R.id.recyclerListaApostas) RecyclerView recyclerListaApostas;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.dataInicialEditText) EditText dataInicialEditText;
+    @BindView(R.id.dataFinalEditText) EditText dataFinalEditText;
 
     private Context context;
     private ListaApostaAdapter listaApostaAdapter;
     private Call<RestListResponse<Aposta>> requestAposta;
     private List<Aposta> listaApostas = new ArrayList<>();
+    private DatePickerDialog.OnDateSetListener dateSetListener = this;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +68,8 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager {
 
         ButterKnife.bind(this, view);
 
+        inputDataInicialClick();
+        inputDataFinalClick();
         setRecyclerListaApostas();
         listarApostas();
     }
@@ -120,8 +130,37 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager {
         }
     }
 
+    private void inputDataInicialClick() {
+        dataInicialEditText.setFocusable(false);
+
+        dataInicialEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dataInicialPicker = new DatePickerFragment(dateSetListener);
+                dataInicialPicker.show(getFragmentManager(), "InicioDatePicker");
+            }
+        });
+    }
+
+    private void inputDataFinalClick() {
+        dataFinalEditText.setFocusable(false);
+
+        dataFinalEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dataFinalPicker = new DatePickerFragment(dateSetListener);
+                dataFinalPicker.show(getFragmentManager(), "FinalDatePicker");
+            }
+        });
+    }
+
     @Override
     public void apostaItemClick(int position) {
         Toast.makeText(context, "Clicou em " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+
     }
 }
