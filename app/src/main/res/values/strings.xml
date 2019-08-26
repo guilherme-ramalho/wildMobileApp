@@ -5,6 +5,8 @@
     <string name="accept">Sim</string>
     <string name="decline">Não</string>
     <string name="server_error">Erro ao se conectar com o servidor</string>
+    <string name="processing_error">Erro ao processar processar</string>
+    <string name="critical_error">Erro crítico ao processar operação</string>
 
     <!--LOGIN-->
     <string name="hint_usuario">USUÁRIO</string>

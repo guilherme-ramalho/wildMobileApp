@@ -85,7 +85,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         inputDataInicialClick();
         inputDataFinalClick();
         setRecyclerListaApostas();
-        listarApostas();
+        listarApostas(true);
         pesquisarApostasClick();
     }
 
@@ -106,7 +106,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void listarApostas() {
+    private void listarApostas(boolean esvaziarLista) {
         try {
             showProgressBar(true);
 
@@ -125,25 +125,29 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
                         RestListResponse<Aposta> resposta = response.body();
 
                         if (resposta.meta.status.equals(RestRequest.SUCCESS)) {
+                            if (esvaziarLista) {
+                                listaApostas.clear();
+                            }
+
                             listaApostas.addAll(resposta.data);
                             listaApostaAdapter.setData(listaApostas);
                         } else {
                             Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.processing_error, Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<RestListResponse<Aposta>> call, Throwable t) {
                     showProgressBar(false);
-                    Toast.makeText(context, "failure", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
             showProgressBar(false);
-            Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -193,7 +197,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         botaoPesquisarAposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listarApostas();
+                listarApostas(true);
             }
         });
     }
