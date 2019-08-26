@@ -119,4 +119,9 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager {
             Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void apostaItemClick(int position) {
+        Toast.makeText(context, "Clicou em " + position, Toast.LENGTH_SHORT).show();
+    }
 }

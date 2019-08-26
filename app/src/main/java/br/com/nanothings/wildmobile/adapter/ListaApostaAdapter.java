@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.ApostaItemManager;
 import br.com.nanothings.wildmobile.model.Aposta;
 import br.com.nanothings.wildmobile.viewholder.ListaApostaViewHolder;
@@ -39,7 +40,12 @@ public class ListaApostaAdapter extends RecyclerView.Adapter<ListaApostaViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ListaApostaViewHolder holder, int position) {
+        Aposta aposta = listaApostas.get(position);
 
+        holder.valorApostaTextView.setText(Utils.bigDecimalToStr(aposta.getValorAposta()));
+        holder.valorPremioTextView.setText(Utils.bigDecimalToStr(aposta.getValorPremio()));
+        holder.dataApostaTextView.setText(aposta.getDataFormatada());
+        holder.nomeApostadorTextView.setText(aposta.getNomeApostador());
     }
 
     @Override

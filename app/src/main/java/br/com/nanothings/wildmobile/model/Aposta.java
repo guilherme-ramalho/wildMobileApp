@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -101,5 +102,11 @@ public class Aposta implements Serializable {
 
     public void addPremioPalpite(BigDecimal premioPalpite) {
         this.valorPremio = this.valorPremio.add(premioPalpite);
+    }
+
+    public String getDataFormatada() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy hh:mm");
+
+        return format.format(this.data);
     }
 }
