@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.helper;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
+import java.util.Locale;
+
+import br.com.nanothings.wildmobile.R;
 
 public class DatePickerFragment extends DialogFragment {
     DatePickerDialog.OnDateSetListener listener;
@@ -25,6 +29,6 @@ public class DatePickerFragment extends DialogFragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(getActivity(), listener, year, month, day);
+        return new DatePickerDialog(getActivity(), R.style.DialogTheme, listener, year, month, day);
     }
 }

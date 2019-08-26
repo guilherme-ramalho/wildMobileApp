@@ -19,7 +19,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
@@ -47,6 +50,9 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     private Call<RestListResponse<Aposta>> requestAposta;
     private List<Aposta> listaApostas = new ArrayList<>();
     private DatePickerDialog.OnDateSetListener dateSetListener = this;
+    private Date dataInicial = Calendar.getInstance().getTime();
+    private Date dataFinal = dataInicial;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +74,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
         ButterKnife.bind(this, view);
 
+        inicializarDateInputs();
         inputDataInicialClick();
         inputDataFinalClick();
         setRecyclerListaApostas();
@@ -131,8 +138,6 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     }
 
     private void inputDataInicialClick() {
-        dataInicialEditText.setFocusable(false);
-
         dataInicialEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,8 +148,6 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     }
 
     private void inputDataFinalClick() {
-        dataFinalEditText.setFocusable(false);
-
         dataFinalEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,6 +157,14 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         });
     }
 
+    private void inicializarDateInputs() {
+        dataInicialEditText.setFocusable(false);
+        dataFinalEditText.setFocusable(false);
+
+        dataInicialEditText.setText(dateFormat.format(dataInicial));
+        dataFinalEditText.setText(dateFormat.format(dataFinal));
+    }
+
     @Override
     public void apostaItemClick(int position) {
         Toast.makeText(context, "Clicou em " + position, Toast.LENGTH_SHORT).show();
@@ -161,6 +172,6 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-
+        Toast.makeText(context, "Data alterada", Toast.LENGTH_SHORT).show();
     }
 }
