@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -87,6 +88,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         setRecyclerListaApostas();
         listarApostas(true);
         pesquisarApostasClick();
+        setRecyclerOnScrollListener();
     }
 
     private void setRecyclerListaApostas() {
@@ -99,6 +101,42 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         ));
 
         recyclerListaApostas.setAdapter(listaApostaAdapter);
+    }
+
+    private void setRecyclerOnScrollListener() {
+        recyclerListaApostas.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int qtdItens = recyclerView.getAdapter().getItemCount();
+
+                if (mostrandoUltimoItem(recyclerView) && qtdItens >= 10) {
+                    paginaSelecionada++;
+                    listarApostas(false);
+                }
+            }
+        });
+    }
+
+    private boolean mostrandoUltimoItem(RecyclerView recyclerView) {
+        int qtdItens = recyclerView.getAdapter().getItemCount();
+
+        if (qtdItens > 0) {
+            int posicaoUltimoItemVisivel = ((LinearLayoutManager)recyclerView.getLayoutManager())
+                    .findLastVisibleItemPosition();
+
+            if (posicaoUltimoItemVisivel != RecyclerView.NO_POSITION && posicaoUltimoItemVisivel == qtdItens - 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void showProgressBar(boolean show) {
@@ -131,6 +169,8 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
                             listaApostas.addAll(resposta.data);
                             listaApostaAdapter.setData(listaApostas);
+
+                            paginaSelecionada = resposta.meta.paginacao.paginaAtual;
                         } else {
                             Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                         }
