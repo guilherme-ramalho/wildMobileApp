@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,6 +32,7 @@ import br.com.nanothings.wildmobile.helper.DatePickerFragment;
 import br.com.nanothings.wildmobile.interfaces.ApostaItemManager;
 import br.com.nanothings.wildmobile.interfaces.ApostaService;
 import br.com.nanothings.wildmobile.model.Aposta;
+import br.com.nanothings.wildmobile.rest.Paginacao;
 import br.com.nanothings.wildmobile.rest.RestListResponse;
 import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
@@ -58,9 +58,9 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private static final int PICKER_DATA_INICIAL = 0;
     private static final int PICKER_DATA_FINAL = 1;
-    private int pickerSelecionado = 0;
-    private int paginaSelecionada = 1;
+    private int datePickerSelecionado = 0;
     private String dataInicialStr, dataFinalStr;
+    private Paginacao paginacao = new Paginacao();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,8 +116,8 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
                 int qtdItens = recyclerView.getAdapter().getItemCount();
 
-                if (mostrandoUltimoItem(recyclerView) && qtdItens >= 10) {
-                    paginaSelecionada++;
+                if (mostrandoUltimoItem(recyclerView) && qtdItens < paginacao.getTotalItens()) {
+                    paginacao.avancarPagina();
                     listarApostas(false);
                 }
             }
@@ -154,7 +154,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
             formatarStringsData();
 
-            requestAposta = apostaService.listar(dataInicialStr, dataFinalStr, paginaSelecionada);
+            requestAposta = apostaService.listar(dataInicialStr, dataFinalStr, paginacao.getPaginaAtual());
             requestAposta.enqueue(new Callback<RestListResponse<Aposta>>() {
                 @Override
                 public void onResponse(Call<RestListResponse<Aposta>> call, Response<RestListResponse<Aposta>> response) {
@@ -170,7 +170,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
                             listaApostas.addAll(resposta.data);
                             listaApostaAdapter.setData(listaApostas);
 
-                            paginaSelecionada = resposta.meta.paginacao.paginaAtual;
+                            paginacao = resposta.meta.paginacao;
                         } else {
                             Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                         }
@@ -207,7 +207,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         dataInicialEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickerSelecionado = 0;
+                datePickerSelecionado = 0;
                 DialogFragment dataInicialPicker = new DatePickerFragment(dateSetListener);
                 dataInicialPicker.show(getFragmentManager(), "InicioDatePicker");
             }
@@ -218,7 +218,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         dataFinalEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickerSelecionado = 1;
+                datePickerSelecionado = 1;
                 DialogFragment dataFinalPicker = new DatePickerFragment(dateSetListener);
                 dataFinalPicker.show(getFragmentManager(), "FinalDatePicker");
             }
@@ -254,7 +254,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         Date dataSelecioanda = calendar.getTime();
         String dataFormatada = dateFormat.format(dataSelecioanda);
 
-        switch (pickerSelecionado) {
+        switch (datePickerSelecionado) {
             case PICKER_DATA_INICIAL:
                 dataInicial = dataSelecioanda;
                 dataInicialEditText.setText(dataFormatada);
