@@ -17,6 +17,7 @@ public interface ApostaService {
     Call<RestListResponse<Aposta>> listar(
             @Query("dataInicial") String dataInicial,
             @Query("dataFinal") String dataFinal,
-            @Query("pagina") int pagina
+            @Query("pagina") int pagina,
+            @Query("itemsPorPagina") int itemsPorPagina
     );
 }

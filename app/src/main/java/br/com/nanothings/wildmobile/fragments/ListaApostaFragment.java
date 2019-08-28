@@ -58,6 +58,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private static final int PICKER_DATA_INICIAL = 0;
     private static final int PICKER_DATA_FINAL = 1;
+    private static final int ITEMS_POR_PAGINA = 15;
     private int datePickerSelecionado = 0;
     private String dataInicialStr, dataFinalStr;
     private Paginacao paginacao = new Paginacao();
@@ -106,20 +107,21 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     private void setRecyclerOnScrollListener() {
         recyclerListaApostas.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int scollState) {
+                super.onScrollStateChanged(recyclerView, scollState);
+
+                int qtdItens = recyclerView.getAdapter().getItemCount();
+                boolean scrollParou = scollState == RecyclerView.SCROLL_STATE_IDLE;
+
+                if (mostrandoUltimoItem(recyclerView) && qtdItens < paginacao.getTotalItens() && scrollParou) {
+                    paginacao.avancarPagina();
+                    listarApostas(false);
+                }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
-                int qtdItens = recyclerView.getAdapter().getItemCount();
-
-                if (mostrandoUltimoItem(recyclerView) && qtdItens < paginacao.getTotalItens()) {
-                    paginacao.avancarPagina();
-                    listarApostas(false);
-                }
             }
         });
     }
@@ -154,7 +156,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
             formatarStringsData();
 
-            requestAposta = apostaService.listar(dataInicialStr, dataFinalStr, paginacao.getPaginaAtual());
+            requestAposta = apostaService.listar(dataInicialStr, dataFinalStr, paginacao.getPaginaAtual(), ITEMS_POR_PAGINA);
             requestAposta.enqueue(new Callback<RestListResponse<Aposta>>() {
                 @Override
                 public void onResponse(Call<RestListResponse<Aposta>> call, Response<RestListResponse<Aposta>> response) {
