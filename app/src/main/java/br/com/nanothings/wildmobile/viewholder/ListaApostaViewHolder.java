@@ -13,7 +13,7 @@ import br.com.nanothings.wildmobile.interfaces.ApostaItemManager;
 public class ListaApostaViewHolder extends RecyclerView.ViewHolder {
     private ApostaItemManager itemManager;
     public LinearLayout listaApostaLayout;
-    public TextView valorApostaTextView, valorPremioTextView, dataApostaTextView, nomeApostadorTextView;
+    public TextView valorApostaTextView, valorPremioTextView, dataApostaTextView, codigoApostaTextView;
 
     public ListaApostaViewHolder(@NonNull View itemView, ApostaItemManager itemManager) {
         super(itemView);
@@ -21,7 +21,7 @@ public class ListaApostaViewHolder extends RecyclerView.ViewHolder {
         valorApostaTextView = itemView.findViewById(R.id.valorApostaTextView);
         valorPremioTextView = itemView.findViewById(R.id.valorPremioTextView);
         dataApostaTextView = itemView.findViewById(R.id.dataApostaTextView);
-        nomeApostadorTextView = itemView.findViewById(R.id.nomeApostadorTextView);
+        codigoApostaTextView = itemView.findViewById(R.id.codigoApostaTextView);
         listaApostaLayout = itemView.findViewById(R.id.listaApostaLayout);
 
         this.itemManager = itemManager;

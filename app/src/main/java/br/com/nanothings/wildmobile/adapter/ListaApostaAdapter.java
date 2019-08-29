@@ -45,7 +45,7 @@ public class ListaApostaAdapter extends RecyclerView.Adapter<ListaApostaViewHold
         holder.valorApostaTextView.setText(Utils.bigDecimalToStr(aposta.getValorAposta()));
         holder.valorPremioTextView.setText(Utils.bigDecimalToStr(aposta.getValorPremio()));
         holder.dataApostaTextView.setText(aposta.getDataFormatada());
-        holder.nomeApostadorTextView.setText(aposta.getNomeApostador());
+        holder.codigoApostaTextView.setText(aposta.getCodigo());
     }
 
     @Override

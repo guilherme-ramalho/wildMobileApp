@@ -45,7 +45,7 @@ import retrofit2.Response;
 public class ListaApostaFragment extends Fragment implements ApostaItemManager, DatePickerDialog.OnDateSetListener {
     @BindView(R.id.recyclerListaApostas) RecyclerView recyclerListaApostas;
     @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.bottomProgressFrame) FrameLayout bottomProgressFrame;
+    //@BindView(R.id.bottomProgressFrame) FrameLayout bottomProgressFrame;
     @BindView(R.id.dataInicialEditText) EditText dataInicialEditText;
     @BindView(R.id.dataFinalEditText) EditText dataFinalEditText;
     @BindView(R.id.botaoPesquisarApostas) Button botaoPesquisarAposta;
@@ -89,7 +89,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         inputDataInicialClick();
         inputDataFinalClick();
         setRecyclerListaApostas();
-        listarApostas(true, false);
+        listarApostas(true);
         pesquisarApostasClick();
         setRecyclerOnScrollListener();
     }
@@ -117,7 +117,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
                 if (mostrandoUltimoItem(recyclerView) && qtdItens < paginacao.getTotalItens() && scrollParou) {
                     paginacao.avancarPagina();
-                    listarApostas(false, true);
+                    listarApostas(false);
                 }
             }
 
@@ -143,18 +143,14 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         return false;
     }
 
-    private void showProgressBar(boolean show, boolean nextPage) {
-        if (nextPage) {
-            bottomProgressFrame.setVisibility(show ? View.GONE : View.VISIBLE);
-        } else {
-            recyclerListaApostas.setVisibility(show ? View.GONE : View.VISIBLE);
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+    private void showProgressBar(boolean show) {
+        recyclerListaApostas.setVisibility(show ? View.GONE : View.VISIBLE);
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void listarApostas(boolean esvaziarLista, boolean carregandoProximaPagina) {
+    private void listarApostas(boolean esvaziarLista) {
         try {
-            showProgressBar(true, carregandoProximaPagina);
+            showProgressBar(true);
 
             ApostaService apostaService = new RestRequest(context).getService(ApostaService.class);
 
@@ -185,17 +181,17 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
                         Toast.makeText(context, R.string.processing_error, Toast.LENGTH_SHORT).show();
                     }
 
-                    showProgressBar(false, carregandoProximaPagina);
+                    showProgressBar(false);
                 }
 
                 @Override
                 public void onFailure(Call<RestListResponse<Aposta>> call, Throwable t) {
-                    showProgressBar(false, carregandoProximaPagina);
+                    showProgressBar(false);
                     Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
-            showProgressBar(false, carregandoProximaPagina);
+            showProgressBar(false);
             Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
     }
@@ -246,7 +242,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
         botaoPesquisarAposta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listarApostas(true, false);
+                listarApostas(true);
             }
         });
     }
