@@ -2,6 +2,7 @@ package br.com.nanothings.wildmobile.fragments;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.activity.DetalheApostaActivity;
 import br.com.nanothings.wildmobile.adapter.ListaApostaAdapter;
 import br.com.nanothings.wildmobile.helper.DatePickerFragment;
 import br.com.nanothings.wildmobile.interfaces.ApostaItemManager;
@@ -249,7 +252,9 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
 
     @Override
     public void apostaItemClick(int position) {
-        Toast.makeText(context, "Clicou em " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), DetalheApostaActivity.class);
+        intent.putExtra("Aposta", listaApostas.get(position));
+        startActivity(intent);
     }
 
     @Override
