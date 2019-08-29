@@ -17,7 +17,7 @@ import butterknife.OnClick;
 public class DetalheApostaActivity extends AppCompatActivity {
     @BindView(R.id.fabCancelar) FloatingActionButton fabCancelar;
 
-    Aposta aposta;
+    private Aposta aposta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,8 @@ public class DetalheApostaActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         aposta = (Aposta) getIntent().getSerializableExtra("Aposta");
+
+        this.setTitle("Aposta " + aposta.getCodigo());
     }
 
     @OnClick(R.id.fabCancelar)
