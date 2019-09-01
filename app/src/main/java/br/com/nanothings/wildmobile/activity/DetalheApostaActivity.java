@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
@@ -83,7 +84,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.printButton) {
-            Toast.makeText(this, "Imprimindo " + aposta.getCodigo(), Toast.LENGTH_SHORT).show();
+            imprimirAposta();
             return true;
         } else {
             finish();
@@ -152,6 +153,10 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
             showProgressBar(false);
             Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void imprimirAposta() {
+        aposta.imprimirComprovante(context);
     }
 
     @Override

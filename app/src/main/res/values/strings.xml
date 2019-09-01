@@ -39,6 +39,11 @@
     <string name="imprimir">Imprimir</string>
     <string name="voltar">Voltar</string>
 
+    <!--PRINTER-->
+    <string name="bluetooth_connection_error">Erro ao conectar-se à impressora</string>
+    <string name="bluetooth_connection_success">Impressora conectada</string>
+    <string name="printer_error">Erro ao realizar impressão</string>
+
     <!--NAVIGATION DRAWER-->
     <string name="menu_home">Início</string>
     <string name="menu_apostas">Apostas</string>
