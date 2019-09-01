@@ -19,6 +19,7 @@ import java.util.TimeZone;
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.helper.BluetoothPrinter;
 import br.com.nanothings.wildmobile.helper.Constants;
+import br.com.nanothings.wildmobile.helper.PrinterHelper;
 import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.PrinterConnectionListener;
 
@@ -145,6 +146,8 @@ public class Aposta implements Serializable {
                     .append(Utils.repeatString("-", 32));
         }
 
+        comprovante.append("\n\n\n");
+
         return comprovante.toString();
     }
 
@@ -162,6 +165,8 @@ public class Aposta implements Serializable {
                 @Override
                 public void onConnected() {
                     Toast.makeText(context, R.string.bluetooth_connection_success, Toast.LENGTH_SHORT).show();
+                    btPrinter.setAlign(BluetoothPrinter.ALIGN_CENTER);
+                    btPrinter.printText(PrinterHelper.gerarTituloComprovante());
                     btPrinter.setAlign(BluetoothPrinter.ALIGN_LEFT);
                     btPrinter.printText(gerarComprovante());
                     btPrinter.addNewLine(6);
