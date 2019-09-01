@@ -100,17 +100,19 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
+        if (data != null && data.hasExtra("palpite")) {
+            Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
 
-        Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
+            Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
 
-        palpite.setSorteio(sorteio);
+            palpite.setSorteio(sorteio);
 
-        aposta.getPalpites().add(palpite);
+            aposta.getPalpites().add(palpite);
 
-        palpiteAdapter.setData(aposta.getPalpites());
+            palpiteAdapter.setData(aposta.getPalpites());
 
-        calcularTotais();
+            calcularTotais();
+        }
     }
 
     @Override

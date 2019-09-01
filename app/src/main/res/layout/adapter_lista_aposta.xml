@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/palpiteLayout"
+    android:id="@+id/listaApostaLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -14,10 +14,10 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/modalidadeTextView"
+            android:id="@+id/codigoApostaTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tipo de Palpite"
+            android:text="0000.0000.0000"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -35,11 +35,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/intervaloPremioTextView"
+            android:id="@+id/dataApostaTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Do 1º prêmio ao 1º prêmio "
+            android:text="00/00/0000 00:00"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/modalidadeTextView" />
@@ -55,22 +56,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/valorApostaTextView" />
 
-        <TextView
-            android:id="@+id/palpitesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="(00-00-00)"
-            app:layout_constraintBaseline_toBaselineOf="@+id/modalidadeTextView"
-            app:layout_constraintStart_toEndOf="@+id/modalidadeTextView" />
-
-        <TextView
-            android:id="@+id/multiplicadorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="(1x)"
-            app:layout_constraintBaseline_toBaselineOf="@+id/valorApostaTextView"
-            app:layout_constraintEnd_toStartOf="@+id/valorApostaTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

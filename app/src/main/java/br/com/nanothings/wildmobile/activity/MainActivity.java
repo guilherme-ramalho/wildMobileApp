@@ -23,7 +23,7 @@ import android.view.Menu;
 import android.widget.TextView;
 
 import br.com.nanothings.wildmobile.R;
-import br.com.nanothings.wildmobile.fragments.ApostaFragment;
+import br.com.nanothings.wildmobile.fragments.ListaApostaFragment;
 import br.com.nanothings.wildmobile.fragments.ApuracaoFragment;
 import br.com.nanothings.wildmobile.fragments.InicioFragment;
 import br.com.nanothings.wildmobile.helper.PreferenceManager;
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_inicio) {
             fragmentInflater(new InicioFragment());
         } else if (id == R.id.nav_apostas) {
-            fragmentInflater(new ApostaFragment());
+            fragmentInflater(new ListaApostaFragment());
         } else if (id == R.id.nav_apuracao) {
             fragmentInflater(new ApuracaoFragment());
         } else if (id == R.id.nav_sair) {

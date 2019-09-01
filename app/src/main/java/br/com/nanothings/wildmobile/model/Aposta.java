@@ -1,16 +1,25 @@
 package br.com.nanothings.wildmobile.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import br.com.nanothings.wildmobile.helper.Constants;
 
 public class Aposta implements Serializable {
     private int id;
     private String codigo, status, nomeApostador;
     private BigDecimal valorAposta, valorPremio, valorComissao;
-    private Date criado, modificado;
+    @SerializedName("dataOriginal")
+    private Date data;
+    @SerializedName("palpiteAposta")
     private List<Palpite> palpites;
 
     public Aposta() {
@@ -76,20 +85,12 @@ public class Aposta implements Serializable {
         this.valorComissao = valorComissao;
     }
 
-    public Date getCriado() {
-        return criado;
+    public Date getData() {
+        return data;
     }
 
-    public void setCriado(Date criado) {
-        this.criado = criado;
-    }
-
-    public Date getModificado() {
-        return modificado;
-    }
-
-    public void setModificado(Date modificado) {
-        this.modificado = modificado;
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public List<Palpite> getPalpites() {
@@ -106,5 +107,12 @@ public class Aposta implements Serializable {
 
     public void addPremioPalpite(BigDecimal premioPalpite) {
         this.valorPremio = this.valorPremio.add(premioPalpite);
+    }
+
+    public String getDataFormatada() {
+        SimpleDateFormat dateFormat = Constants.DATE_FORMAT;
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+
+        return dateFormat.format(this.data);
     }
 }
