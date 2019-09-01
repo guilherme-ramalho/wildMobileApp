@@ -22,7 +22,7 @@ public class PalpiteViewHolder extends RecyclerView.ViewHolder {
         modalidadeTextView = itemView.findViewById(R.id.modalidadeTextView);
         valorApostaTextView = itemView.findViewById(R.id.valorApostaTextView);
         palpitesTexView = itemView.findViewById(R.id.palpitesTextView);
-        intervalorPremioTextView = itemView.findViewById(R.id.intervalorPremioTextView);
+        intervalorPremioTextView = itemView.findViewById(R.id.intervaloPremioTextView);
         palpiteLayout = itemView.findViewById(R.id.palpiteLayout);
         multiplicadorTextView = itemView.findViewById(R.id.multiplicadorTextView);
         valorPremioTextView = itemView.findViewById(R.id.valorPremioTextView);

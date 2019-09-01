@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApostaService {
@@ -20,4 +21,7 @@ public interface ApostaService {
             @Query("pagina") int pagina,
             @Query("itemsPorPagina") int itemsPorPagina
     );
+
+    @GET("/aposta/listar/{id}")
+    Call<RestObjResponse<Aposta>> listar(@Path("id") int id);
 }

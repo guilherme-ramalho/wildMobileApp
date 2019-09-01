@@ -1,11 +1,14 @@
 package br.com.nanothings.wildmobile.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Palpite implements Serializable {
     private int[] numerosArray;
     private int primeiroPremio, ultimoPremio;
+    @SerializedName("palpite")
     private String numerosString;
     private BigDecimal valorAposta, valorPremio;
     private TipoPalpite tipoPalpite;

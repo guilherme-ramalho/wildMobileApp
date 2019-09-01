@@ -19,6 +19,7 @@ public class Aposta implements Serializable {
     private BigDecimal valorAposta, valorPremio, valorComissao;
     @SerializedName("dataOriginal")
     private Date data;
+    @SerializedName("palpiteAposta")
     private List<Palpite> palpites;
 
     public Aposta() {
