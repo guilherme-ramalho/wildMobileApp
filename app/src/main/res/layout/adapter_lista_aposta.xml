@@ -11,18 +11,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
 
-        <TextView
-            android:id="@+id/codigoApostaTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0000.0000.0000"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
+        <ImageView
+            android:id="@+id/statusImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/aguardando" />
 
         <TextView
             android:id="@+id/valorApostaTextView"
@@ -38,12 +37,12 @@
             android:id="@+id/dataApostaTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:text="00/00/0000 00:00"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/modalidadeTextView" />
+            app:layout_constraintStart_toEndOf="@+id/statusImageView"
+            app:layout_constraintTop_toBottomOf="@+id/codigoApostaTextView" />
 
         <TextView
             android:id="@+id/valorPremioTextView"
@@ -55,6 +54,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/valorApostaTextView" />
+
+        <TextView
+            android:id="@+id/codigoApostaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="0000.0000.0000"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/statusImageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
