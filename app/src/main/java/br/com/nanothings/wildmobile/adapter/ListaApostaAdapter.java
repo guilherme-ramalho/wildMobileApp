@@ -46,6 +46,20 @@ public class ListaApostaAdapter extends RecyclerView.Adapter<ListaApostaViewHold
         holder.valorPremioTextView.setText(Utils.bigDecimalToStr(aposta.getValorPremio()));
         holder.dataApostaTextView.setText(aposta.getDataFormatada());
         holder.codigoApostaTextView.setText(aposta.getCodigo());
+        holder.statusImageView.setImageResource(getStatusImageId(aposta.getStatus()));
+    }
+
+    private int getStatusImageId(String status) {
+        switch (status) {
+            case "VNC":
+                return R.drawable.venceu;
+            case "PRD":
+                return R.drawable.perdeu;
+            case "CLD":
+                return R.drawable.cancelado;
+            default:
+                return R.drawable.aguardando;
+        }
     }
 
     @Override

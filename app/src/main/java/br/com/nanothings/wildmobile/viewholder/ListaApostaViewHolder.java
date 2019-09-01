@@ -1,6 +1,7 @@
 package br.com.nanothings.wildmobile.viewholder;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ public class ListaApostaViewHolder extends RecyclerView.ViewHolder {
     private ApostaItemManager itemManager;
     public LinearLayout listaApostaLayout;
     public TextView valorApostaTextView, valorPremioTextView, dataApostaTextView, codigoApostaTextView;
+    public ImageView statusImageView;
 
     public ListaApostaViewHolder(@NonNull View itemView, ApostaItemManager itemManager) {
         super(itemView);
@@ -23,6 +25,7 @@ public class ListaApostaViewHolder extends RecyclerView.ViewHolder {
         dataApostaTextView = itemView.findViewById(R.id.dataApostaTextView);
         codigoApostaTextView = itemView.findViewById(R.id.codigoApostaTextView);
         listaApostaLayout = itemView.findViewById(R.id.listaApostaLayout);
+        statusImageView = itemView.findViewById(R.id.statusImageView);
 
         this.itemManager = itemManager;
 
