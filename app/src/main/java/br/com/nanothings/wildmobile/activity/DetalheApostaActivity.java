@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,7 +28,6 @@ import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +62,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
         this.setTitle("Aposta " + aposta.getCodigo());
 
-        listarApostas();
+        listarApostaPorId();
     }
 
     @OnClick(R.id.fabCancelar)
@@ -109,7 +107,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void listarApostas() {
+    private void listarApostaPorId() {
         try {
             showProgressBar(true);
 
@@ -117,7 +115,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
             if (request != null) request.cancel();
 
-            request = apostaService.listar(aposta.getId());
+            request = apostaService.listarPorId(aposta.getId());
             request.enqueue(new Callback<RestObjResponse<Aposta>>() {
                 @Override
                 public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {

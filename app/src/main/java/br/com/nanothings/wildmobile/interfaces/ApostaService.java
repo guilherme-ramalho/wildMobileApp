@@ -23,5 +23,5 @@ public interface ApostaService {
     );
 
     @GET("/aposta/listar/{id}")
-    Call<RestObjResponse<Aposta>> listar(@Path("id") int id);
+    Call<RestObjResponse<Aposta>> listarPorId(@Path("id") int id);
 }
