@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,11 +45,11 @@ import retrofit2.Response;
 
 public class ListaApostaFragment extends Fragment implements ApostaItemManager, DatePickerDialog.OnDateSetListener {
     @BindView(R.id.recyclerListaApostas) RecyclerView recyclerListaApostas;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.progressBarApuracao) ProgressBar progressBar;
     //@BindView(R.id.bottomProgressFrame) FrameLayout bottomProgressFrame;
     @BindView(R.id.dataInicialEditText) EditText dataInicialEditText;
     @BindView(R.id.dataFinalEditText) EditText dataFinalEditText;
-    @BindView(R.id.botaoPesquisarApostas) Button botaoPesquisarAposta;
+    @BindView(R.id.botaoPesquisar) Button botaoPesquisar;
 
     private Context context;
     private ListaApostaAdapter listaApostaAdapter;
@@ -242,7 +240,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     }
 
     private void pesquisarApostasClick() {
-        botaoPesquisarAposta.setOnClickListener(new View.OnClickListener() {
+        botaoPesquisar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listarApostas(true);

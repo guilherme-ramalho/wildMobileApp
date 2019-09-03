@@ -308,9 +308,8 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                 .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Aposta aposta = response.body().data;
-
-                                        Toast.makeText(context, "Imprimindo...", Toast.LENGTH_SHORT).show();
+                                        aposta = resposta.data;
+                                        aposta.imprimirComprovante(context);
 
                                         reciclarActicity();
                                     }

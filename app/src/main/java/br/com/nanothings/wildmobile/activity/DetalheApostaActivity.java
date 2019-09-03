@@ -28,7 +28,6 @@ import br.com.nanothings.wildmobile.rest.RestRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,7 +62,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
         this.setTitle("Aposta " + aposta.getCodigo());
 
-        listarApostas();
+        listarApostaPorId();
     }
 
     @OnClick(R.id.fabCancelar)
@@ -83,7 +82,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.printButton) {
-            Toast.makeText(this, "Imprimindo " + aposta.getCodigo(), Toast.LENGTH_SHORT).show();
+            imprimirAposta();
             return true;
         } else {
             finish();
@@ -108,7 +107,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void listarApostas() {
+    private void listarApostaPorId() {
         try {
             showProgressBar(true);
 
@@ -116,7 +115,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
             if (request != null) request.cancel();
 
-            request = apostaService.listar(aposta.getId());
+            request = apostaService.listarPorId(aposta.getId());
             request.enqueue(new Callback<RestObjResponse<Aposta>>() {
                 @Override
                 public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {
@@ -152,6 +151,10 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
             showProgressBar(false);
             Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void imprimirAposta() {
+        aposta.imprimirComprovante(context);
     }
 
     @Override
