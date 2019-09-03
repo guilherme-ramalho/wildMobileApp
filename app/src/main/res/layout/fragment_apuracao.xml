@@ -33,19 +33,19 @@
         app:layout_constraintTop_toBottomOf="@+id/buscaPorData">
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBarApuracao"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminate="true"
             android:indeterminateTint="@color/colorPrimary"
-            android:indeterminateTintMode="src_atop"
-            android:visibility="gone"/>
+            android:indeterminateTintMode="src_atop"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/constraintLayoutApuracao">
 
 
             <TextView
@@ -114,7 +114,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/limiteDisponivelTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="R$ 1.000,00"
@@ -164,7 +164,7 @@
                 android:text="Qtd. Apostas"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/limiteDisponivelTextView" />
 
             <TextView
                 android:id="@+id/quantidadeApostasTextView"
@@ -175,7 +175,7 @@
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/limiteDisponivelTextView" />
 
             <View
                 android:id="@+id/view"
