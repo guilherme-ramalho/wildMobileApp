@@ -67,7 +67,33 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
     @OnClick(R.id.fabCancelar)
     void fabCancelarClick() {
-        Toast.makeText(this, "Cancelando " + aposta.getCodigo(), Toast.LENGTH_SHORT).show();
+        try {
+            ApostaService apostaService = new RestRequest(context).getService(ApostaService.class);
+
+            if (request != null) request.cancel();
+
+            request = apostaService.cancelar(aposta.getId());
+            request.enqueue(new Callback<RestObjResponse<Aposta>>() {
+                @Override
+                public void onResponse(Call<RestObjResponse<Aposta>> call, Response<RestObjResponse<Aposta>> response) {
+                    if (response.isSuccessful()) {
+                        RestObjResponse<Aposta> resposta = response.body();
+
+                        Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, R.string.processing_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RestObjResponse<Aposta>> call, Throwable t) {
+                    Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -82,7 +108,7 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.printButton) {
-            imprimirAposta();
+            aposta.imprimirComprovante(context);
             return true;
         } else {
             finish();
@@ -151,10 +177,6 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
             showProgressBar(false);
             Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void imprimirAposta() {
-        aposta.imprimirComprovante(context);
     }
 
     @Override

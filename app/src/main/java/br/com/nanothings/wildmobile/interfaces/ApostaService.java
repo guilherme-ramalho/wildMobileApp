@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,4 +25,7 @@ public interface ApostaService {
 
     @GET("/aposta/listar/{id}")
     Call<RestObjResponse<Aposta>> listarPorId(@Path("id") int id);
+
+    @PUT("/aposta/cancelar/{id}")
+    Call<RestObjResponse<Aposta>> cancelar(@Path("id") int id);
 }
