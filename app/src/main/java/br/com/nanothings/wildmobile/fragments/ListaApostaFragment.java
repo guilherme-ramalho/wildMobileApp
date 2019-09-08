@@ -261,7 +261,7 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data.getBooleanExtra("ApostaCancelada", false) == true) {
+        if (data != null && data.getBooleanExtra("ApostaCancelada", false) == true) {
             listarApostas(true);
         }
     }

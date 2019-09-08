@@ -133,7 +133,7 @@ public class Aposta implements Serializable {
         comprovante.append("Cód. Aposta: " + codigo + "\n")
                 .append("Apostador: " + nomeApostador + "\n")
                 .append("Valor Apostado: " + Utils.bigDecimalToStr(valorAposta) + "\n")
-                .append("Valor Prêmio: " + Utils.bigDecimalToStr(valorPremio) + "\n")
+                .append("Prêmio Possível: " + Utils.bigDecimalToStr(valorPremio) + "\n")
                 .append("Data: " + getDataFormatada() + "\n")
                 .append(Utils.repeatString("-", 32) + "\n");
         
@@ -143,6 +143,7 @@ public class Aposta implements Serializable {
                     .append("(" + palpite.getNumerosString() + ")\n")
                     .append("Intervalo: " + palpite.getTextIntervaloPremio() + "\n")
                     .append("Valor palpite: " + Utils.bigDecimalToStr(palpite.getValorAposta()) + "\n")
+                    .append("Prêmio palpite: " + Utils.bigDecimalToStr(palpite.getValorPremio()) + "\n")
                     .append(Utils.repeatString("-", 32));
         }
 

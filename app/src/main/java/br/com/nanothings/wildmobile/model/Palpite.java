@@ -73,7 +73,7 @@ public class Palpite implements Serializable {
     }
 
     public String getTextIntervaloPremio() {
-        return "Do " + this.primeiroPremio + "º prêmio ao " + this.ultimoPremio + "º prêmio";
+        return "Do " + this.primeiroPremio + "º ao " + this.ultimoPremio + "º prêmio";
     }
 
     public int[] getNumerosArray() {
