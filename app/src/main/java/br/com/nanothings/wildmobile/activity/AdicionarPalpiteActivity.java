@@ -221,7 +221,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity {
             return false;
         }
 
-        if(palpite.getUltimoPremio() - palpite.getPrimeiroPremio() < tipoPalpite.getQtdDigitos()) {
+        if( (palpite.getUltimoPremio() - palpite.getPrimeiroPremio() + 1) < palpite.getNumerosArray().length) {
             String mensagem = getString(
                     R.string.erro_quantidade_premio,
                     String.valueOf(tipoPalpite.getQtdDigitos())
