@@ -30,6 +30,7 @@ import java.util.List;
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.DetalheApostaActivity;
 import br.com.nanothings.wildmobile.adapter.ListaApostaAdapter;
+import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.DatePickerFragment;
 import br.com.nanothings.wildmobile.interfaces.ApostaItemManager;
 import br.com.nanothings.wildmobile.interfaces.ApostaService;
@@ -252,7 +253,17 @@ public class ListaApostaFragment extends Fragment implements ApostaItemManager, 
     public void apostaItemClick(int position) {
         Intent intent = new Intent(getActivity(), DetalheApostaActivity.class);
         intent.putExtra("Aposta", listaApostas.get(position));
-        startActivity(intent);
+        //startActivity(intent);
+        startActivityForResult(intent, Constants.FRAGMENT_APOSTAS_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data.getBooleanExtra("ApostaCancelada", false) == true) {
+            listarApostas(true);
+        }
     }
 
     @Override

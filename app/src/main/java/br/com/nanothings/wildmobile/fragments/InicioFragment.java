@@ -32,6 +32,7 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.AdicionarPalpiteActivity;
 import br.com.nanothings.wildmobile.activity.MainActivity;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
+import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.ProgressLoader;
 import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.ApostaService;
@@ -133,7 +134,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
         intent.putExtra("PalpiteEdicao", palpite);
 
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, Constants.FRAGMENT_INICIO_CODE);
     }
 
     @OnClick(R.id.botaoAdicionarPalpite)

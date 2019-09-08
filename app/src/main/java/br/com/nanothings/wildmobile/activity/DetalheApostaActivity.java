@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,7 +81,14 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
                         RestObjResponse<Aposta> resposta = response.body();
 
                         Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
-                    } else {
+
+                        if (resposta.meta.status.equals(RestRequest.SUCCESS)) {
+                            Intent intent = new Intent();
+                            intent.putExtra("ApostaCancelada", true);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                     } else {
                         Toast.makeText(context, R.string.processing_error, Toast.LENGTH_SHORT).show();
                     }
                 }
