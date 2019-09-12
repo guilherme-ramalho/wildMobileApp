@@ -1,12 +1,17 @@
 apply plugin: 'com.android.application'
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 1
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "br.com.nanothings.wildmobile"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
