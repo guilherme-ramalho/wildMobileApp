@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.helper;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import br.com.nanothings.wildmobile.interfaces.BluetoothConnectionListener;
 import br.com.nanothings.wildmobile.interfaces.PrinterConnectionListener;
@@ -17,6 +19,7 @@ public class BluetoothPrinter {
     public static final int ALIGN_CENTER = 100;
     public static final int ALIGN_RIGHT = 101;
     public static final int ALIGN_LEFT = 102;
+    public static final int BLUETOOTH_ENABLE_CODE = 1;
 
     private static final byte[] NEW_LINE = {10};
     private static final byte[] ESC_ALIGN_CENTER = new byte[]{0x1b, 'a', 0x01};
@@ -29,12 +32,9 @@ public class BluetoothPrinter {
             "1100", "1101", "1110", "1111"};
 
     private BluetoothDevice printer;
+    private BluetoothAdapter btAdapter;
     private BluetoothSocket btSocket = null;
     private OutputStream btOutputStream = null;
-
-    public BluetoothPrinter(BluetoothDevice printer) {
-        this.printer = printer;
-    }
 
     public void connect(final PrinterConnectionListener printerConnectListener) {
         new ConnectionTask(new BluetoothConnectionListener() {
@@ -54,6 +54,27 @@ public class BluetoothPrinter {
                 printerConnectListener.onFailed();
             }
         }).execute(printer);
+    }
+
+    public boolean setBluetoothAdapter() {
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (bluetoothAdapterIsEnabled()) {
+            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+
+            if (pairedDevices.size() > 0) {
+                for (BluetoothDevice device : pairedDevices) {
+                    printer = device;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean bluetoothAdapterIsEnabled() {
+        return btAdapter != null && btAdapter.isEnabled();
     }
 
     public boolean isConnected() {

@@ -3,6 +3,7 @@ package br.com.nanothings.wildmobile.model;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
@@ -14,9 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.activity.DetalheApostaActivity;
 import br.com.nanothings.wildmobile.helper.BluetoothPrinter;
 import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.PrinterHelper;
@@ -154,13 +157,16 @@ public class Aposta implements Serializable {
 
     public void imprimirComprovante(Context context) {
         try {
-            BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothDevice btDevice = btAdapter
-                    .getBondedDevices()
-                    .iterator()
-                    .next();
+            final BluetoothPrinter btPrinter = new BluetoothPrinter();
 
-            final BluetoothPrinter btPrinter = new BluetoothPrinter(btDevice);
+            boolean adapterIsSet = btPrinter.setBluetoothAdapter();
+
+            if (!adapterIsSet) {
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                ((DetalheApostaActivity) context).startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_ENABLE_CODE);
+                //Toast.makeText(context, "Bluetooth inativo", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             btPrinter.connect(new PrinterConnectionListener() {
                 @Override
