@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.model;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -20,6 +21,8 @@ import java.util.TimeZone;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.activity.DetalheApostaActivity;
+import br.com.nanothings.wildmobile.activity.DispositivosBluetoothActivity;
+import br.com.nanothings.wildmobile.activity.MainActivity;
 import br.com.nanothings.wildmobile.helper.BluetoothPrinter;
 import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.PrinterHelper;
@@ -188,5 +191,11 @@ public class Aposta implements Serializable {
         } catch (Exception e) {
             Toast.makeText(context, R.string.printer_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void selecionarDispositivoImpressao(Context context, Activity activity) {
+        Intent intent = new Intent(context, DispositivosBluetoothActivity.class);
+
+        activity.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_LIST_CODE);
     }
 }

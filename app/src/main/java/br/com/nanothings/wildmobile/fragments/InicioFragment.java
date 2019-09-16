@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -310,7 +311,10 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         aposta = resposta.data;
-                                        aposta.imprimirComprovante(context);
+
+                                        Activity activity = ((MainActivity) context);
+
+                                        aposta.selecionarDispositivoImpressao(context, activity);
 
                                         reciclarActicity();
                                     }

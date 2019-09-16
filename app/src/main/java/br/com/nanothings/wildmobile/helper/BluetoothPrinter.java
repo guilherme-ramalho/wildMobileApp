@@ -20,6 +20,7 @@ public class BluetoothPrinter {
     public static final int ALIGN_RIGHT = 101;
     public static final int ALIGN_LEFT = 102;
     public static final int BLUETOOTH_ENABLE_CODE = 1;
+    public static final int BLUETOOTH_LIST_CODE = 2;
 
     private static final byte[] NEW_LINE = {10};
     private static final byte[] ESC_ALIGN_CENTER = new byte[]{0x1b, 'a', 0x01};
