@@ -24,43 +24,11 @@
             app:srcCompat="@drawable/aguardando" />
 
         <TextView
-            android:id="@+id/valorApostaTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="R$ 0,00"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/enderecoDispositivoTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="00/00/0000 00:00"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/statusImageView"
-            app:layout_constraintTop_toBottomOf="@+id/nomeDispositivoTextView" />
-
-        <TextView
-            android:id="@+id/valorPremioTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="R$ 0,00"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/valorApostaTextView" />
-
-        <TextView
             android:id="@+id/nomeDispositivoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="0000.0000.0000"
+            android:text="Nome dispositivo"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
