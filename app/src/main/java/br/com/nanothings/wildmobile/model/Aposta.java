@@ -37,6 +37,7 @@ public class Aposta implements Serializable {
     private Date data;
     @SerializedName("palpiteAposta")
     private List<Palpite> palpites;
+    private BluetoothPrinter btPrinter;
 
     public Aposta() {
         this.palpites = new ArrayList<>();
@@ -160,17 +161,6 @@ public class Aposta implements Serializable {
 
     public void imprimirComprovante(Context context) {
         try {
-            final BluetoothPrinter btPrinter = new BluetoothPrinter();
-
-            boolean adapterIsSet = btPrinter.setBluetoothAdapter();
-
-            if (!adapterIsSet) {
-                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                ((DetalheApostaActivity) context).startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_ENABLE_CODE);
-                //Toast.makeText(context, "Bluetooth inativo", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             btPrinter.connect(new PrinterConnectionListener() {
                 @Override
                 public void onConnected() {
@@ -194,6 +184,16 @@ public class Aposta implements Serializable {
     }
 
     public void selecionarDispositivoImpressao(Context context, Activity activity) {
+        btPrinter = new BluetoothPrinter();
+
+        boolean adapterIsSet = btPrinter.setBluetoothAdapter();
+
+        if (!adapterIsSet) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_ENABLE_CODE);
+            return;
+        }
+
         Intent intent = new Intent(context, DispositivosBluetoothActivity.class);
 
         activity.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_LIST_CODE);

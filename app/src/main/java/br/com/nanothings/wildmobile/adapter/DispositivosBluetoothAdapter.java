@@ -10,13 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.interfaces.BluetoothDeviceItemManager;
 import br.com.nanothings.wildmobile.viewholder.DispositivosBluetoothViewHolder;
 
 public class DispositivosBluetoothAdapter extends RecyclerView.Adapter<DispositivosBluetoothViewHolder> {
     private ArrayList<String> dispositivosPareados;
+    private BluetoothDeviceItemManager itemManager;
 
-    public DispositivosBluetoothAdapter(ArrayList<String> dispositivosPareados) {
+    public DispositivosBluetoothAdapter(ArrayList<String> dispositivosPareados, BluetoothDeviceItemManager itemManager) {
         this.dispositivosPareados = dispositivosPareados;
+        this.itemManager = itemManager;
     }
 
     @NonNull
@@ -25,7 +28,7 @@ public class DispositivosBluetoothAdapter extends RecyclerView.Adapter<Dispositi
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.adapter_dispositivo_bluetooth, parent, false);
 
-        return new DispositivosBluetoothViewHolder(view);
+        return new DispositivosBluetoothViewHolder(view, itemManager);
     }
 
     @Override
