@@ -11,14 +11,16 @@ import br.com.nanothings.wildmobile.interfaces.BluetoothConnectionListener;
 
 public class ConnectionTask extends AsyncTask<BluetoothDevice, Void, BluetoothSocket> {
     private BluetoothConnectionListener btConnectListener;
+    private BluetoothDevice device;
 
-    public ConnectionTask(BluetoothConnectionListener btConnectListener) {
+    public ConnectionTask(BluetoothDevice device, BluetoothConnectionListener btConnectListener) {
         this.btConnectListener = btConnectListener;
+        this.device = device;
     }
 
     @Override
     public BluetoothSocket doInBackground(BluetoothDevice... bluetoothDevices) {
-        BluetoothDevice device = bluetoothDevices[0];
+        //BluetoothDevice device = bluetoothDevices[0];
         UUID uuid = device.getUuids()[0].getUuid();
         BluetoothSocket socket = null;
         boolean connected = true;

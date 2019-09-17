@@ -1,9 +1,13 @@
 package br.com.nanothings.wildmobile.model;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,9 +18,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.activity.DetalheApostaActivity;
+import br.com.nanothings.wildmobile.activity.DispositivosBluetoothActivity;
+import br.com.nanothings.wildmobile.activity.MainActivity;
 import br.com.nanothings.wildmobile.helper.BluetoothPrinter;
 import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.PrinterHelper;
@@ -31,6 +39,7 @@ public class Aposta implements Serializable {
     private Date data;
     @SerializedName("palpiteAposta")
     private List<Palpite> palpites;
+    private BluetoothPrinter btPrinter;
 
     public Aposta() {
         this.palpites = new ArrayList<>();
@@ -152,16 +161,9 @@ public class Aposta implements Serializable {
         return comprovante.toString();
     }
 
-    public void imprimirComprovante(Context context) {
+    public void imprimirComprovante(Context context, BluetoothDevice device) {
         try {
-            BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothDevice btDevice = btAdapter
-                    .getBondedDevices()
-                    .iterator()
-                    .next();
-
-            final BluetoothPrinter btPrinter = new BluetoothPrinter(btDevice);
-
+            btPrinter.setDevice(device);
             btPrinter.connect(new PrinterConnectionListener() {
                 @Override
                 public void onConnected() {
@@ -182,5 +184,37 @@ public class Aposta implements Serializable {
         } catch (Exception e) {
             Toast.makeText(context, R.string.printer_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void selecionarDispositivoImpressao(Context context, Activity activity) {
+        btPrinter = new BluetoothPrinter();
+
+        boolean adapterIsSet = btPrinter.setBluetoothAdapter();
+
+        if (!adapterIsSet) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_ENABLE_CODE);
+            return;
+        }
+
+        Intent intent = new Intent(context, DispositivosBluetoothActivity.class);
+
+        activity.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_LIST_CODE);
+    }
+
+    public void selecionarDispositivoImpressao(Context context, Fragment fragment) {
+        btPrinter = new BluetoothPrinter();
+
+        boolean adapterIsSet = btPrinter.setBluetoothAdapter();
+
+        if (!adapterIsSet) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            fragment.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_ENABLE_CODE);
+            return;
+        }
+
+        Intent intent = new Intent(context, DispositivosBluetoothActivity.class);
+
+        fragment.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_LIST_CODE);
     }
 }
