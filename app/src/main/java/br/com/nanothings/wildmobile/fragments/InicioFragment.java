@@ -1,6 +1,5 @@
 package br.com.nanothings.wildmobile.fragments;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
