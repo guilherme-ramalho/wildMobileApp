@@ -1,6 +1,7 @@
 package br.com.nanothings.wildmobile.fragments;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -102,18 +103,26 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null && data.hasExtra("palpite")) {
-            Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
+        if (data != null) {
+            if (data.hasExtra("palpite")) {
+                Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
 
-            Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
+                Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
 
-            palpite.setSorteio(sorteio);
+                palpite.setSorteio(sorteio);
 
-            aposta.getPalpites().add(palpite);
+                aposta.getPalpites().add(palpite);
 
-            palpiteAdapter.setData(aposta.getPalpites());
+                palpiteAdapter.setData(aposta.getPalpites());
 
-            calcularTotais();
+                calcularTotais();
+            } else if (data.hasExtra("dispositivo")) {
+                BluetoothDevice dispositivo = data.getParcelableExtra("dispositivo");
+
+                aposta.imprimirComprovante(context, dispositivo);
+
+                reciclarActicity();
+            }
         }
     }
 
@@ -312,11 +321,11 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         aposta = resposta.data;
 
-                                        Activity activity = ((MainActivity) context);
+                                        Fragment fragment = InicioFragment.this;
 
-                                        aposta.selecionarDispositivoImpressao(context, activity);
+                                        aposta.selecionarDispositivoImpressao(context, fragment);
 
-                                        reciclarActicity();
+                                        //reciclarActicity();
                                     }
                                 }).create().show();
                     } else {

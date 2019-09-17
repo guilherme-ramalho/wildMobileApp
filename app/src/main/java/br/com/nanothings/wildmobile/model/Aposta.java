@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -198,5 +200,21 @@ public class Aposta implements Serializable {
         Intent intent = new Intent(context, DispositivosBluetoothActivity.class);
 
         activity.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_LIST_CODE);
+    }
+
+    public void selecionarDispositivoImpressao(Context context, Fragment fragment) {
+        btPrinter = new BluetoothPrinter();
+
+        boolean adapterIsSet = btPrinter.setBluetoothAdapter();
+
+        if (!adapterIsSet) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            fragment.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_ENABLE_CODE);
+            return;
+        }
+
+        Intent intent = new Intent(context, DispositivosBluetoothActivity.class);
+
+        fragment.startActivityForResult(intent, BluetoothPrinter.BLUETOOTH_LIST_CODE);
     }
 }
