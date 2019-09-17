@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.adapter;
 
+import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,17 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.interfaces.BluetoothDeviceItemManager;
 import br.com.nanothings.wildmobile.viewholder.DispositivosBluetoothViewHolder;
 
 public class DispositivosBluetoothAdapter extends RecyclerView.Adapter<DispositivosBluetoothViewHolder> {
-    private ArrayList<String> dispositivosPareados;
+    private List<BluetoothDevice> dispositivosPareados;
     private BluetoothDeviceItemManager itemManager;
 
-    public DispositivosBluetoothAdapter(ArrayList<String> dispositivosPareados, BluetoothDeviceItemManager itemManager) {
+    public DispositivosBluetoothAdapter(List<BluetoothDevice> dispositivosPareados, BluetoothDeviceItemManager itemManager) {
         this.dispositivosPareados = dispositivosPareados;
         this.itemManager = itemManager;
     }
@@ -33,9 +34,10 @@ public class DispositivosBluetoothAdapter extends RecyclerView.Adapter<Dispositi
 
     @Override
     public void onBindViewHolder(@NonNull DispositivosBluetoothViewHolder holder, int position) {
-        String nomeDispositivo = dispositivosPareados.get(position);
+        BluetoothDevice device = dispositivosPareados.get(position);
 
-        holder.nomeDispositivoTextView.setText(nomeDispositivo);
+        holder.nomeDispositivoTextView.setText(device.getName());
+        holder.enderecoDispositivoTextView.setText(device.getAddress());
     }
 
     @Override

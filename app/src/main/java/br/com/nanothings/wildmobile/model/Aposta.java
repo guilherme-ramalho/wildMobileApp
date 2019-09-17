@@ -159,9 +159,9 @@ public class Aposta implements Serializable {
         return comprovante.toString();
     }
 
-    public void imprimirComprovante(Context context) {
+    public void imprimirComprovante(Context context, BluetoothDevice device) {
         try {
-            btPrinter.connect(new PrinterConnectionListener() {
+            btPrinter.connect(device, new PrinterConnectionListener() {
                 @Override
                 public void onConnected() {
                     Toast.makeText(context, R.string.bluetooth_connection_success, Toast.LENGTH_SHORT).show();

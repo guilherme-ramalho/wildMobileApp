@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -123,6 +125,17 @@ public class DetalheApostaActivity extends AppCompatActivity implements PalpiteI
         } else {
             finish();
             return true;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && data.hasExtra("dispositivo")) {
+            BluetoothDevice dispositivo = data.getParcelableExtra("dispositivo");
+
+            aposta.imprimirComprovante(context, dispositivo);
         }
     }
 

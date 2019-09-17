@@ -11,7 +11,7 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.interfaces.BluetoothDeviceItemManager;
 
 public class DispositivosBluetoothViewHolder extends RecyclerView.ViewHolder {
-    public TextView nomeDispositivoTextView;
+    public TextView nomeDispositivoTextView, enderecoDispositivoTextView;
     public LinearLayout dispositivoLayout;
     private BluetoothDeviceItemManager itemManager;
 
@@ -19,6 +19,7 @@ public class DispositivosBluetoothViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         nomeDispositivoTextView = itemView.findViewById(R.id.nomeDispositivoTextView);
+        enderecoDispositivoTextView = itemView.findViewById(R.id.enderecoDispositivoTextView);
         dispositivoLayout = itemView.findViewById(R.id.dispositivoBluetoothLayout);
 
         this.itemManager = itemManager;

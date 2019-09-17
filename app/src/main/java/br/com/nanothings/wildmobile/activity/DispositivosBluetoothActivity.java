@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import br.com.nanothings.wildmobile.R;
@@ -34,8 +35,7 @@ public class DispositivosBluetoothActivity extends AppCompatActivity implements 
     private Context context;
     private DispositivosBluetoothAdapter dispositivosBluetoothAdapter;
     private BluetoothAdapter btAdapter;
-    private Set<BluetoothDevice> dispositivosPareados;
-    private ArrayList<String> listaNomesDispositivos = new ArrayList<>();
+    private List<BluetoothDevice> dispositivosPareados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,23 +60,13 @@ public class DispositivosBluetoothActivity extends AppCompatActivity implements 
         finish();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(context, "Result", Toast.LENGTH_SHORT).show();
-    }
-
     private void getBluetoothDevices() {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (btAdapter != null && btAdapter.isEnabled()) {
-            dispositivosPareados = btAdapter.getBondedDevices();
+            dispositivosPareados = new ArrayList<>(btAdapter.getBondedDevices());
 
             if (dispositivosPareados.size() > 0) {
-                for (BluetoothDevice dispositivo : dispositivosPareados) {
-                    listaNomesDispositivos.add(dispositivo.getName());
-                }
-
                 setRecyclerDispositivosBluetooth();
 
                 recyclerDispositivosBluetooth.setVisibility(View.VISIBLE);
@@ -89,7 +79,7 @@ public class DispositivosBluetoothActivity extends AppCompatActivity implements 
     }
 
     private void setRecyclerDispositivosBluetooth() {
-        dispositivosBluetoothAdapter = new DispositivosBluetoothAdapter(listaNomesDispositivos, this);
+        dispositivosBluetoothAdapter = new DispositivosBluetoothAdapter(dispositivosPareados, this);
 
         recyclerDispositivosBluetooth.setLayoutManager(new LinearLayoutManager(context));
         recyclerDispositivosBluetooth.setHasFixedSize(true);
@@ -101,6 +91,9 @@ public class DispositivosBluetoothActivity extends AppCompatActivity implements 
 
     @Override
     public void bluetoothDeviceItemClick(int position) {
-        Toast.makeText(context, "pos " + position , Toast.LENGTH_SHORT).show();
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("dispositivo", dispositivosPareados.get(position));
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 }

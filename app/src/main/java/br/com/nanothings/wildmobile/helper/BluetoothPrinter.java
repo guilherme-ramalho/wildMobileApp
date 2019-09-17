@@ -37,7 +37,9 @@ public class BluetoothPrinter {
     private BluetoothSocket btSocket = null;
     private OutputStream btOutputStream = null;
 
-    public void connect(final PrinterConnectionListener printerConnectListener) {
+    public void connect(final BluetoothDevice device, final PrinterConnectionListener printerConnectListener) {
+        printer = device;
+
         new ConnectionTask(new BluetoothConnectionListener() {
             @Override
             public void onConnected(BluetoothSocket socket) {
@@ -64,10 +66,12 @@ public class BluetoothPrinter {
             Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
 
             if (pairedDevices.size() > 0) {
-                for (BluetoothDevice device : pairedDevices) {
+                /*for (BluetoothDevice device : pairedDevices) {
                     printer = device;
                     return true;
-                }
+                }*/
+
+                return true;
             }
         }
 

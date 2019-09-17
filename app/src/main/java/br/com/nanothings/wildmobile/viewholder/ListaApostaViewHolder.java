@@ -22,8 +22,8 @@ public class ListaApostaViewHolder extends RecyclerView.ViewHolder {
 
         valorApostaTextView = itemView.findViewById(R.id.valorApostaTextView);
         valorPremioTextView = itemView.findViewById(R.id.valorPremioTextView);
-        dataApostaTextView = itemView.findViewById(R.id.enderecoDispositivoTextView);
-        codigoApostaTextView = itemView.findViewById(R.id.nomeDispositivoTextView);
+        dataApostaTextView = itemView.findViewById(R.id.dataApostaTextView);
+        codigoApostaTextView = itemView.findViewById(R.id.codigoApostaTextView);
         listaApostaLayout = itemView.findViewById(R.id.listaApostaLayout);
         statusImageView = itemView.findViewById(R.id.statusImageView);
 
