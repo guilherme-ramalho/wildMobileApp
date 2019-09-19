@@ -1,6 +1,7 @@
 package br.com.nanothings.wildmobile.viewholder;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import br.com.nanothings.wildmobile.interfaces.BluetoothDeviceItemManager;
 
 public class DispositivosBluetoothViewHolder extends RecyclerView.ViewHolder {
     public TextView nomeDispositivoTextView, enderecoDispositivoTextView;
+    public ImageView tipoDispositivoImageView;
     public LinearLayout dispositivoLayout;
     private BluetoothDeviceItemManager itemManager;
 
@@ -21,6 +23,7 @@ public class DispositivosBluetoothViewHolder extends RecyclerView.ViewHolder {
         nomeDispositivoTextView = itemView.findViewById(R.id.nomeDispositivoTextView);
         enderecoDispositivoTextView = itemView.findViewById(R.id.enderecoDispositivoTextView);
         dispositivoLayout = itemView.findViewById(R.id.dispositivoBluetoothLayout);
+        tipoDispositivoImageView = itemView.findViewById(R.id.tipoDispositivoImageView);
 
         this.itemManager = itemManager;
 

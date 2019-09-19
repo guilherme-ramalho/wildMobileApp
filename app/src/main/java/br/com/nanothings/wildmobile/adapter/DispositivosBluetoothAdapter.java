@@ -1,5 +1,6 @@
 package br.com.nanothings.wildmobile.adapter;
 
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,11 @@ public class DispositivosBluetoothAdapter extends RecyclerView.Adapter<Dispositi
 
         holder.nomeDispositivoTextView.setText(device.getName());
         holder.enderecoDispositivoTextView.setText(device.getAddress());
+        holder.tipoDispositivoImageView.setImageResource(
+                device.getBluetoothClass().getMajorDeviceClass() == BluetoothClass.Device.Major.IMAGING
+                        ? R.drawable.printer
+                        : R.drawable.bluetooth
+        );
     }
 
     @Override
