@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         } catch(Exception ex) {
             progressLoader.showLoader(false);
-            Toast.makeText(this, R.string.server_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
     }
 
