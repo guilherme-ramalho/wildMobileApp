@@ -170,6 +170,10 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                         RestListResponse<Sorteio> resposta = response.body();
 
                         if(resposta.meta.status.equals(RestRequest.SUCCESS)) {
+                            if (resposta.data.size() == 0) {
+                                Toast.makeText(context, R.string.sem_sorteios, Toast.LENGTH_SHORT).show();
+                            }
+
                             listaSorteio = resposta.data;
                             setSpinnerSorteio();
                         } else if(resposta.meta.status.equals(RestRequest.EXPIRED)) {
