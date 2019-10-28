@@ -103,14 +103,17 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null) {
-            if (data.hasExtra("palpite")) {
+            if (data.hasExtra("ListaPalpites")) {
                 Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
 
-                Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
+                ArrayList<Palpite> listaPalpites = (ArrayList<Palpite>) data.getSerializableExtra("ListaPalpites");
 
-                palpite.setSorteio(sorteio);
+                //Adiciona o sorteio selecionado em todos os palpites da lista
+                for(int i = 0 ; i < listaPalpites.size() ; i++) {
+                    listaPalpites.get(i).setSorteio(sorteio);
+                }
 
-                aposta.getPalpites().add(palpite);
+                aposta.getPalpites().addAll(listaPalpites);
 
                 palpiteAdapter.setData(aposta.getPalpites());
 
@@ -336,7 +339,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                 resposta.meta.mensagem :
                                 getResources().getString(R.string.erro_cadastro_aposta);
 
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -348,7 +351,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
             });
         } catch(Exception e) {
             progressLoader.showLoader(false);
-            Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
     }
 

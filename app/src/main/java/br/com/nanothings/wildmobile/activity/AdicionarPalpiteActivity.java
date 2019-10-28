@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +53,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     private TipoPalpite tipoPalpite;
     private ModalidadeAposta modalidadeSelcionada;
     private MajoraMask majoraMask = new MajoraMask();
-    private List<Palpite> listaPalpites = new ArrayList<>();
+    private ArrayList<Palpite> listaPalpites = new ArrayList<>();
     private PalpiteAdapter palpiteAdapter;
 
     @Override
@@ -194,11 +195,10 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
     @OnClick(R.id.buttonFinalizarInclusao)
     void buttonFinalizarInclusao() {
-        /*Intent resultIntent = new Intent();
-        resultIntent.putExtra("palpite", palpite);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("ListaPalpites", listaPalpites);
         setResult(RESULT_OK, resultIntent);
-        finish();*/
-        Toast.makeText(context, "Finalizando...", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private boolean palpiteValido() {
