@@ -6,13 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,7 +42,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     @BindView(R.id.spinnerPrimeiroPremio) Spinner spinnerPrimeiroPremio;
     @BindView(R.id.spinnerUltimoPremio) Spinner spinnerUltimoPremio;
     @BindView(R.id.inputPalpite) EditText inputPalpite;
-    @BindView(R.id.inputValorAposta) EditText inputValorAposta;
+    @BindView(R.id.inputValorPalpite) EditText inputValorPalpite;
     @BindView(R.id.recyclerPalpitesInclusos) RecyclerView recyclerPalpitesInclusos;
 
     private List<ModalidadeAposta> listaModalidadeAposta;
@@ -73,7 +71,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         spinnerUltimoPremioChange();
         setRecyclerPalpitesInclusos();
 
-        majoraMask.addCurrencyMask(inputValorAposta);
+        majoraMask.addCurrencyMask(inputValorPalpite);
 
         verificarIntentExtra();
     }
@@ -94,7 +92,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
         if(palpite != null) {
             inputPalpite.setText(palpite.getNumerosString());
-            inputValorAposta.setText(palpite.getValorAposta().toString());
+            inputValorPalpite.setText(palpite.getValorAposta().toString());
             spinnerPrimeiroPremio.setSelection(palpite.getPrimeiroPremio() - 1);
             spinnerUltimoPremio.setSelection(palpite.getUltimoPremio() - 1);
         } else {
@@ -184,6 +182,14 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         listaPalpites.add(palpite);
 
         palpiteAdapter.setData(listaPalpites);
+
+        palpite = new Palpite();
+        palpite.setTipoPalpite(tipoPalpite);
+
+        /*inputPalpite.setText("");
+        inputValorPalpite.setText("0,00");
+        spinnerPrimeiroPremio.setSelection(0);
+        spinnerUltimoPremio.setSelection(0);*/
     }
 
     @OnClick(R.id.buttonFinalizarInclusao)
@@ -255,11 +261,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     }
 
     private boolean valorApostaValido() {
-        String valorApostaStr = inputValorAposta.getText().toString();
+        String valorApostaStr = inputValorPalpite.getText().toString();
         
         if(valorApostaStr.isEmpty()) {
             Toast.makeText(context, R.string.aposta_vazia, Toast.LENGTH_SHORT).show();
-            inputValorAposta.requestFocus();
+            inputValorPalpite.requestFocus();
 
             return false;
         }

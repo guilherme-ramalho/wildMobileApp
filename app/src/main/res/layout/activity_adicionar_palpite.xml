@@ -30,7 +30,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputValorAposta" />
+        app:layout_constraintTop_toBottomOf="@+id/inputValorPalpite" />
 
     <Spinner
         android:id="@+id/spinnerTipoPalpite"
@@ -54,7 +54,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/inputValorAposta" />
+        app:layout_constraintTop_toBottomOf="@+id/inputValorPalpite" />
 
     <Button
         android:id="@+id/buttonFinalizarInclusao"
@@ -71,7 +71,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/inputValorAposta"
+        android:id="@+id/inputValorPalpite"
         style="@style/CustomEditText"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -84,7 +84,9 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        <requestFocus/>
+    </EditText>
 
     <TextView
         android:id="@+id/textView4"
@@ -133,7 +135,7 @@
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toStartOf="@+id/spinnerUltimoPremio"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/inputValorAposta"
+        app:layout_constraintStart_toEndOf="@+id/inputValorPalpite"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
