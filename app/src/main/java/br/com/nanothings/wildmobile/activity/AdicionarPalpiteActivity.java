@@ -1,7 +1,9 @@
 package br.com.nanothings.wildmobile.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
+import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.MajoraMask;
 import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
@@ -55,6 +58,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     private MajoraMask majoraMask = new MajoraMask();
     private ArrayList<Palpite> listaPalpites = new ArrayList<>();
     private PalpiteAdapter palpiteAdapter;
+    private ItemTouchHelper.SimpleCallback itemTouchCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         spinnerModalidadeChange();
         spinnerPrimeiroPremioChange();
         spinnerUltimoPremioChange();
+        setPalpiteSwipe();
         setRecyclerPalpitesInclusos();
 
         majoraMask.addCurrencyMask(inputValorPalpite);
@@ -137,8 +142,25 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
                 recyclerPalpitesInclusos.getContext(), DividerItemDecoration.VERTICAL
         ));
 
+        new ItemTouchHelper(itemTouchCallback).attachToRecyclerView(recyclerPalpitesInclusos);
+
         recyclerPalpitesInclusos.setAdapter(palpiteAdapter);
     }
+
+    private void setPalpiteSwipe() {
+        itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                deletarPalpite(viewHolder.getAdapterPosition());
+            }
+        };
+    }
+
 
     private void listarModalidadesAposta() {
         try {
@@ -368,7 +390,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
     @Override
     public void deletarPalpite(int position) {
-
+        listaPalpites.remove(position);
+        palpiteAdapter.notifyItemRemoved(position);
     }
 
     @Override
