@@ -26,6 +26,7 @@ import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.fragments.ListaApostaFragment;
 import br.com.nanothings.wildmobile.fragments.ApuracaoFragment;
 import br.com.nanothings.wildmobile.fragments.InicioFragment;
+import br.com.nanothings.wildmobile.fragments.ResultadoFragment;
 import br.com.nanothings.wildmobile.helper.PreferenceManager;
 import br.com.nanothings.wildmobile.model.Cambista;
 import butterknife.BindView;
@@ -101,7 +102,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentInflater(new ListaApostaFragment());
         } else if (id == R.id.nav_apuracao) {
             fragmentInflater(new ApuracaoFragment());
-        } else if (id == R.id.nav_sair) {
+        } else if(id == R.id.nav_resultado) {
+            fragmentInflater(new ResultadoFragment());
+        }
+        else if (id == R.id.nav_sair) {
             encerrarSessao();
         }
 

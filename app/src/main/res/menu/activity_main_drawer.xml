@@ -17,6 +17,10 @@
             android:icon="@drawable/ic_menu_money"
             android:title="@string/menu_apuracao" />
         <item
+            android:id="@+id/nav_resultado"
+            android:icon="@drawable/ic_menu_result"
+            android:title="@string/menu_resultado" />
+        <item
             android:id="@+id/nav_sair"
             android:icon="@drawable/ic_menu_exit"
             android:title="@string/menu_exit" />

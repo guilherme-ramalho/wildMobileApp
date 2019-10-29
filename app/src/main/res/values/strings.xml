@@ -49,6 +49,7 @@
     <string name="menu_home">Início</string>
     <string name="menu_apostas">Apostas</string>
     <string name="menu_apuracao">Apuração</string>
+    <string name="menu_resultado">Resultado</string>
     <string name="menu_exit">Sair</string>
 
     <string-array name="premios_array">
@@ -58,4 +59,7 @@
         <item>4º</item>
         <item>5º</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
