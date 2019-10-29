@@ -123,7 +123,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
                 aposta.imprimirComprovante(context, dispositivo);
 
-                reciclarActicity();
+                reciclarActivity();
             }
         }
     }
@@ -319,7 +319,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                 .setNegativeButton(R.string.voltar, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        reciclarActicity();
+                                        reciclarActivity();
                                     }
                                 })
                                 .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
@@ -331,7 +331,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
                                         aposta.selecionarDispositivoImpressao(context, fragment);
 
-                                        //reciclarActicity();
+                                        //reciclarActivity();
                                     }
                                 }).create().show();
                     } else {
@@ -355,7 +355,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         }
     }
 
-    private void reciclarActicity() {
+    private void reciclarActivity() {
         startActivity(new Intent(getActivity(), MainActivity.class));
     }
 }

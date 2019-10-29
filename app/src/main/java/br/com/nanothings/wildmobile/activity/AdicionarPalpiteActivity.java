@@ -195,10 +195,14 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
     @OnClick(R.id.buttonFinalizarInclusao)
     void buttonFinalizarInclusao() {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("ListaPalpites", listaPalpites);
-        setResult(RESULT_OK, resultIntent);
-        finish();
+        if (listaPalpites.isEmpty()) {
+            Toast.makeText(context, R.string.lista_palpites_vazia, Toast.LENGTH_SHORT).show();
+        } else {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("ListaPalpites", listaPalpites);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        }
     }
 
     private boolean palpiteValido() {
