@@ -1,7 +1,9 @@
 package br.com.nanothings.wildmobile.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
 import br.com.nanothings.wildmobile.adapter.PalpiteAdapter;
+import br.com.nanothings.wildmobile.helper.Constants;
 import br.com.nanothings.wildmobile.helper.MajoraMask;
 import br.com.nanothings.wildmobile.helper.Utils;
 import br.com.nanothings.wildmobile.interfaces.ModalidadeApostaService;
@@ -44,7 +46,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     @BindView(R.id.spinnerPrimeiroPremio) Spinner spinnerPrimeiroPremio;
     @BindView(R.id.spinnerUltimoPremio) Spinner spinnerUltimoPremio;
     @BindView(R.id.inputPalpite) EditText inputPalpite;
-    @BindView(R.id.inputValorAposta) EditText inputValorAposta;
+    @BindView(R.id.inputValorPalpite) EditText inputValorPalpite;
     @BindView(R.id.recyclerPalpitesInclusos) RecyclerView recyclerPalpitesInclusos;
 
     private List<ModalidadeAposta> listaModalidadeAposta;
@@ -54,8 +56,9 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     private TipoPalpite tipoPalpite;
     private ModalidadeAposta modalidadeSelcionada;
     private MajoraMask majoraMask = new MajoraMask();
-    private List<Palpite> listaPalpites = new ArrayList<>();
+    private ArrayList<Palpite> listaPalpites = new ArrayList<>();
     private PalpiteAdapter palpiteAdapter;
+    private ItemTouchHelper.SimpleCallback itemTouchCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +74,10 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         spinnerModalidadeChange();
         spinnerPrimeiroPremioChange();
         spinnerUltimoPremioChange();
+        setPalpiteSwipe();
         setRecyclerPalpitesInclusos();
 
-        majoraMask.addCurrencyMask(inputValorAposta);
+        majoraMask.addCurrencyMask(inputValorPalpite);
 
         verificarIntentExtra();
     }
@@ -94,7 +98,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
         if(palpite != null) {
             inputPalpite.setText(palpite.getNumerosString());
-            inputValorAposta.setText(palpite.getValorAposta().toString());
+            inputValorPalpite.setText(palpite.getValorAposta().toString());
             spinnerPrimeiroPremio.setSelection(palpite.getPrimeiroPremio() - 1);
             spinnerUltimoPremio.setSelection(palpite.getUltimoPremio() - 1);
         } else {
@@ -138,8 +142,25 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
                 recyclerPalpitesInclusos.getContext(), DividerItemDecoration.VERTICAL
         ));
 
+        new ItemTouchHelper(itemTouchCallback).attachToRecyclerView(recyclerPalpitesInclusos);
+
         recyclerPalpitesInclusos.setAdapter(palpiteAdapter);
     }
+
+    private void setPalpiteSwipe() {
+        itemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                deletarPalpite(viewHolder.getAdapterPosition());
+            }
+        };
+    }
+
 
     private void listarModalidadesAposta() {
         try {
@@ -184,15 +205,26 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         listaPalpites.add(palpite);
 
         palpiteAdapter.setData(listaPalpites);
+
+        palpite = new Palpite();
+        palpite.setTipoPalpite(tipoPalpite);
+
+        /*inputPalpite.setText("");
+        inputValorPalpite.setText("0,00");
+        spinnerPrimeiroPremio.setSelection(0);
+        spinnerUltimoPremio.setSelection(0);*/
     }
 
     @OnClick(R.id.buttonFinalizarInclusao)
     void buttonFinalizarInclusao() {
-        /*Intent resultIntent = new Intent();
-        resultIntent.putExtra("palpite", palpite);
-        setResult(RESULT_OK, resultIntent);
-        finish();*/
-        Toast.makeText(context, "Finalizando...", Toast.LENGTH_SHORT).show();
+        if (listaPalpites.isEmpty()) {
+            Toast.makeText(context, R.string.lista_palpites_vazia, Toast.LENGTH_SHORT).show();
+        } else {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("ListaPalpites", listaPalpites);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        }
     }
 
     private boolean palpiteValido() {
@@ -255,11 +287,11 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
     }
 
     private boolean valorApostaValido() {
-        String valorApostaStr = inputValorAposta.getText().toString();
+        String valorApostaStr = inputValorPalpite.getText().toString();
         
         if(valorApostaStr.isEmpty()) {
             Toast.makeText(context, R.string.aposta_vazia, Toast.LENGTH_SHORT).show();
-            inputValorAposta.requestFocus();
+            inputValorPalpite.requestFocus();
 
             return false;
         }
@@ -358,7 +390,8 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
     @Override
     public void deletarPalpite(int position) {
-
+        listaPalpites.remove(position);
+        palpiteAdapter.notifyItemRemoved(position);
     }
 
     @Override

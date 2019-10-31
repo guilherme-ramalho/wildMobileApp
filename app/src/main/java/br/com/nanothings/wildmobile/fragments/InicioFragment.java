@@ -103,14 +103,17 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null) {
-            if (data.hasExtra("palpite")) {
+            if (data.hasExtra("ListaPalpites")) {
                 Sorteio sorteio = listaSorteio.get(spinnerSorteio.getSelectedItemPosition());
 
-                Palpite palpite = (Palpite) data.getSerializableExtra("palpite");
+                ArrayList<Palpite> listaPalpites = (ArrayList<Palpite>) data.getSerializableExtra("ListaPalpites");
 
-                palpite.setSorteio(sorteio);
+                //Adiciona o sorteio selecionado em todos os palpites da lista
+                for(int i = 0 ; i < listaPalpites.size() ; i++) {
+                    listaPalpites.get(i).setSorteio(sorteio);
+                }
 
-                aposta.getPalpites().add(palpite);
+                aposta.getPalpites().addAll(listaPalpites);
 
                 palpiteAdapter.setData(aposta.getPalpites());
 
@@ -120,7 +123,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
                 aposta.imprimirComprovante(context, dispositivo);
 
-                reciclarActicity();
+                reciclarActivity();
             }
         }
     }
@@ -138,12 +141,12 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
     @Override
     public void editarPalpite(int position) {
-        Palpite palpite = aposta.getPalpites().get(position);
+        /*Palpite palpite = aposta.getPalpites().get(position);
 
         Intent intent = new Intent(getActivity(), AdicionarPalpiteActivity.class);
         intent.putExtra("PalpiteEdicao", palpite);
 
-        startActivityForResult(intent, Constants.FRAGMENT_INICIO_CODE);
+        startActivityForResult(intent, Constants.FRAGMENT_INICIO_CODE);*/
     }
 
     @OnClick(R.id.botaoAdicionarPalpite)
@@ -316,7 +319,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                 .setNegativeButton(R.string.voltar, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        reciclarActicity();
+                                        reciclarActivity();
                                     }
                                 })
                                 .setPositiveButton(R.string.imprimir, new DialogInterface.OnClickListener() {
@@ -328,7 +331,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
 
                                         aposta.selecionarDispositivoImpressao(context, fragment);
 
-                                        //reciclarActicity();
+                                        //reciclarActivity();
                                     }
                                 }).create().show();
                     } else {
@@ -336,7 +339,7 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
                                 resposta.meta.mensagem :
                                 getResources().getString(R.string.erro_cadastro_aposta);
 
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -348,11 +351,11 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
             });
         } catch(Exception e) {
             progressLoader.showLoader(false);
-            Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void reciclarActicity() {
+    private void reciclarActivity() {
         startActivity(new Intent(getActivity(), MainActivity.class));
     }
 }

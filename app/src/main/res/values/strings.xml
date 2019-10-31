@@ -40,6 +40,9 @@
     <string name="voltar">Voltar</string>
     <string name="sem_sorteios">Nenhum sorteio encontrado</string>
 
+    <!--ADICIONAR PALPITE ACTIVITY-->
+    <string name="lista_palpites_vazia">Nenhum palpite adicionado</string>
+
     <!--PRINTER-->
     <string name="bluetooth_connection_error">Erro ao conectar-se à impressora</string>
     <string name="bluetooth_connection_success">Impressora conectada</string>
