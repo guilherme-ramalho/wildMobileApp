@@ -7,6 +7,7 @@ public class Sorteio implements Serializable {
     private int id;
     private String status, data;
     private Date dataOriginal;
+    private Resultado resultados;
 
     public int getId() {
         return id;
@@ -38,5 +39,13 @@ public class Sorteio implements Serializable {
 
     public void setDataOriginal(Date dataOriginal) {
         this.dataOriginal = dataOriginal;
+    }
+
+    public Resultado getResultados() {
+        return resultados;
+    }
+
+    public void setResultados(Resultado resultados) {
+        this.resultados = resultados;
     }
 }

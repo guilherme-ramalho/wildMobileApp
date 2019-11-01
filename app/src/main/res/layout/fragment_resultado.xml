@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/buscaPorData"
-        layout="@layout/layout_busca_por_data"
+        layout="@layout/layout_busca_por_dia"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
