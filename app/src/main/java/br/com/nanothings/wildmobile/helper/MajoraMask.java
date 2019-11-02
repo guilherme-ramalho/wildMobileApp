@@ -47,7 +47,8 @@ public class MajoraMask {
                     Locale locale = new Locale("pt", "BR");
                     String formatted = NumberFormat.getCurrencyInstance(locale).format((parsed/100));
 
-                    current = formatted.replaceAll("[R$]", "");
+                    current = formatted.replaceAll("[R$\\s]", "");
+
                     editText.setText(current);
                     editText.setSelection(editText.length());
                     editText.addTextChangedListener(this);
