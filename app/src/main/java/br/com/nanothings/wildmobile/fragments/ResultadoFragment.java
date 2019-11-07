@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +37,8 @@ import retrofit2.Response;
 
 public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     @BindView(R.id.dataInicialEditText) EditText dataInicialEditText;
+    @BindView(R.id.recyclerListaResultado) RecyclerView recyclerListarResultado;
+    @BindView(R.id.progressBarResultado) ProgressBar progressBarResultado;
 
     private Context context;
     private Date dataInicial = Calendar.getInstance().getTime();
@@ -69,10 +73,15 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
         buscarResultados();
     }
 
-    @OnClick(R.id.botaoPesquisar)
+    @OnClick(R.id.dataInicialEditText)
     void inputDataClick() {
         DialogFragment dataInicialPicker = new DatePickerFragment(dateSetListener);
         dataInicialPicker.show(getFragmentManager(), "InicioDatePicker");
+    }
+
+    @OnClick(R.id.botaoPesquisar)
+    void pesquisarResultado() {
+        buscarResultados();
     }
 
     @Override
@@ -96,8 +105,16 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
         dataInicialEditText.setText(dateFormat.format(dataInicial));
     }
 
+    private void showProgressBar(boolean show) {
+        recyclerListarResultado.setVisibility(show ? View.GONE : View.VISIBLE);
+        progressBarResultado.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+
     private void buscarResultados() {
         try {
+            showProgressBar(true);
+
             SorteioService sorteioService = new RestRequest(context).getService(SorteioService.class);
 
             if(request != null) request.cancel();
@@ -120,14 +137,18 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
                     } else {
                         Toast.makeText(context, R.string.processing_error, Toast.LENGTH_SHORT).show();
                     }
+
+                    showProgressBar(false);
                 }
 
                 @Override
                 public void onFailure(Call<RestListResponse<Sorteio>> call, Throwable t) {
+                    showProgressBar(false);
                     Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch(Exception e) {
+            showProgressBar(false);
             Toast.makeText(context, R.string.critical_error, Toast.LENGTH_SHORT).show();
         }
     }
