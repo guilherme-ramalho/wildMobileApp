@@ -202,7 +202,18 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         if(!valorApostaValido()) return;
         if(!premiosSelecionadosValidos()) return;
 
-        listaPalpites.add(palpite);
+        if (!listaPalpites.isEmpty()) {
+            for (int i = 0; i < listaPalpites.size(); i++) {
+                if (listaPalpites.get(i).getTipoPalpite() == palpite.getTipoPalpite() && listaPalpites.get(i).getNumerosString() == palpite.getNumerosString()) {
+                    Toast.makeText(context, "Não são permitidos palpites iguais, por favor verifique os dados!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    listaPalpites.add(palpite);
+                }
+            }
+        } else {
+            listaPalpites.add(palpite);
+        }
 
         palpiteAdapter.setData(listaPalpites);
 
@@ -210,8 +221,6 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         palpite.setTipoPalpite(tipoPalpite);
         palpite.setPrimeiroPremio(spinnerPrimeiroPremio.getSelectedItemPosition()+1);
         palpite.setUltimoPremio(spinnerUltimoPremio.getSelectedItemPosition()+1);
-
-        System.out.println(palpite);
 
         /*inputPalpite.setText("");
         inputValorPalpite.setText("0,00");
