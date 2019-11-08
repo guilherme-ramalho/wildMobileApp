@@ -208,6 +208,10 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
 
         palpite = new Palpite();
         palpite.setTipoPalpite(tipoPalpite);
+        palpite.setPrimeiroPremio(spinnerPrimeiroPremio.getSelectedItemPosition()+1);
+        palpite.setUltimoPremio(spinnerUltimoPremio.getSelectedItemPosition()+1);
+
+        System.out.println(palpite);
 
         /*inputPalpite.setText("");
         inputValorPalpite.setText("0,00");
