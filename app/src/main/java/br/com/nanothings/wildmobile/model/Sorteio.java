@@ -2,12 +2,13 @@ package br.com.nanothings.wildmobile.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Sorteio implements Serializable {
     private int id;
     private String status, data;
     private Date dataOriginal;
-    private Resultado resultados;
+    private List<Resultado> resultados;
 
     public int getId() {
         return id;
@@ -41,11 +42,11 @@ public class Sorteio implements Serializable {
         this.dataOriginal = dataOriginal;
     }
 
-    public Resultado getResultados() {
+    public List<Resultado> getResultados() {
         return resultados;
     }
 
-    public void setResultados(Resultado resultados) {
+    public void setResultados(List<Resultado> resultados) {
         this.resultados = resultados;
     }
 }
