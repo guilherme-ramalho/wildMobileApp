@@ -42,6 +42,7 @@
 
     <!--ADICIONAR PALPITE ACTIVITY-->
     <string name="lista_palpites_vazia">Nenhum palpite adicionado</string>
+    <string name="palpites_repetidos">Não são permitidos palpites iguais!</string>
 
     <!--PRINTER-->
     <string name="bluetooth_connection_error">Erro ao conectar-se à impressora</string>

@@ -161,7 +161,6 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         };
     }
 
-
     private void listarModalidadesAposta() {
         try {
             ModalidadeApostaService modalidadeApostaService = new RestRequest(this).getService(ModalidadeApostaService.class);
@@ -175,7 +174,7 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
                     if(response.isSuccessful()) {
                         RestListResponse<ModalidadeAposta> resposta = response.body();
 
-                        if(resposta.meta.status.equals("success")) {
+                        if(resposta.meta.status.equals(RestRequest.SUCCESS)) {
                             listaModalidadeAposta = resposta.data;
                             setSpinnerModalidade();
                         } else {
@@ -202,18 +201,20 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         if(!valorApostaValido()) return;
         if(!premiosSelecionadosValidos()) return;
 
+        //Verifica se existem palpites repetidos
         if (!listaPalpites.isEmpty()) {
-            for (int i = 0; i < listaPalpites.size(); i++) {
-                if (listaPalpites.get(i).getTipoPalpite() == palpite.getTipoPalpite() && listaPalpites.get(i).getNumerosString() == palpite.getNumerosString()) {
-                    Toast.makeText(context, "Não são permitidos palpites iguais, por favor verifique os dados!", Toast.LENGTH_SHORT).show();
+            for(Palpite palpiteAtual : listaPalpites) {
+                boolean tipoPalpitesIguais = palpiteAtual.getTipoPalpite().getId() == palpite.getTipoPalpite().getId();
+                boolean numeroPalpitesIguais = palpiteAtual.getNumerosString().equals(palpite.getNumerosString());
+
+                if (tipoPalpitesIguais && numeroPalpitesIguais) {
+                    Toast.makeText(context, R.string.palpites_repetidos, Toast.LENGTH_SHORT).show();
                     return;
-                } else {
-                    listaPalpites.add(palpite);
                 }
             }
-        } else {
-            listaPalpites.add(palpite);
         }
+
+        listaPalpites.add(palpite);
 
         palpiteAdapter.setData(listaPalpites);
 
@@ -221,11 +222,6 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
         palpite.setTipoPalpite(tipoPalpite);
         palpite.setPrimeiroPremio(spinnerPrimeiroPremio.getSelectedItemPosition()+1);
         palpite.setUltimoPremio(spinnerUltimoPremio.getSelectedItemPosition()+1);
-
-        /*inputPalpite.setText("");
-        inputValorPalpite.setText("0,00");
-        spinnerPrimeiroPremio.setSelection(0);
-        spinnerUltimoPremio.setSelection(0);*/
     }
 
     @OnClick(R.id.buttonFinalizarInclusao)
