@@ -46,7 +46,10 @@ public class PalpiteAdapter extends RecyclerView.Adapter<PalpiteViewHolder> {
         holder.intervalorPremioTextView.setText(palpite.getTextIntervaloPremio());
         holder.valorApostaTextView.setText(Utils.bigDecimalToStr(palpite.getValorAposta()));
         holder.modalidadeTextView.setText(palpite.getTipoPalpite().getNome());
-        holder.multiplicadorTextView.setText("(" + palpite.getTipoPalpite().getMultiplicador().intValue() + "x)");
+
+        Integer qtdPremios = (palpite.getUltimoPremio() - palpite.getPrimeiroPremio()) + 1;
+        holder.multiplicadorTextView.setText("(" + palpite.getTipoPalpite().getMultiplicador().floatValue()/qtdPremios + "x)");
+
         holder.valorPremioTextView.setText(Utils.bigDecimalToStr(palpite.getValorPremio()));
     }
 

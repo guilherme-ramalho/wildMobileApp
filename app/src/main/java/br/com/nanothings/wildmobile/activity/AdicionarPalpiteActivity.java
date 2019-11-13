@@ -206,8 +206,9 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
             for(Palpite palpiteAtual : listaPalpites) {
                 boolean tipoPalpitesIguais = palpiteAtual.getTipoPalpite().getId() == palpite.getTipoPalpite().getId();
                 boolean numeroPalpitesIguais = palpiteAtual.getNumerosString().equals(palpite.getNumerosString());
+                boolean intervalosIguais = palpiteAtual.getTextIntervaloPremio().equals(palpite.getTextIntervaloPremio());
 
-                if (tipoPalpitesIguais && numeroPalpitesIguais) {
+                if (tipoPalpitesIguais && numeroPalpitesIguais && intervalosIguais) {
                     Toast.makeText(context, R.string.palpites_repetidos, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -315,8 +316,10 @@ public class AdicionarPalpiteActivity extends AppCompatActivity implements Palpi
             return false;
         }
 
+        //Calculando os valores da aposta, e do prêmio dividindo pela quantidade de prêmio selecionados.
         palpite.setValorAposta(valorAposta);
-        BigDecimal multiplicador = new BigDecimal(tipoPalpite.getMultiplicador());
+        Integer qtdPremios = (palpite.getUltimoPremio() - palpite.getPrimeiroPremio()) + 1;
+        BigDecimal multiplicador = new BigDecimal(tipoPalpite.getMultiplicador()/qtdPremios);
         palpite.setValorPremio(valorAposta.multiply(multiplicador));
 
         return true;

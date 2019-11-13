@@ -264,7 +264,8 @@ public class InicioFragment extends Fragment implements PalpiteItemManager {
         for(Palpite palpite : aposta.getPalpites()) {
             aposta.addValorAposta(palpite.getValorAposta());
 
-            BigDecimal multiplicadorPalpite = new BigDecimal(palpite.getTipoPalpite().getMultiplicador());
+            Integer qtdPremios = (palpite.getUltimoPremio() - palpite.getPrimeiroPremio()) + 1;
+            BigDecimal multiplicadorPalpite = new BigDecimal(palpite.getTipoPalpite().getMultiplicador().floatValue()/qtdPremios);
             BigDecimal premioPalpiteAtual = palpite.getValorAposta().multiply(multiplicadorPalpite);
             aposta.addPremioPalpite(premioPalpiteAtual);
         }
