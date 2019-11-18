@@ -15,14 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import br.com.nanothings.wildmobile.R;
+import br.com.nanothings.wildmobile.adapter.ListaSorteioAdapter;
 import br.com.nanothings.wildmobile.helper.DatePickerFragment;
 import br.com.nanothings.wildmobile.interfaces.SorteioService;
 import br.com.nanothings.wildmobile.model.Sorteio;
@@ -35,18 +39,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class ListaSorteioFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     @BindView(R.id.dataInicialEditText) EditText dataInicialEditText;
-    @BindView(R.id.recyclerListaResultado) RecyclerView recyclerListarResultado;
-    @BindView(R.id.progressBarResultado) ProgressBar progressBarResultado;
+    @BindView(R.id.recyclerListaSorteio) RecyclerView recyclerListarSorteio;
+    @BindView(R.id.progressBarSorteio) ProgressBar progressBarSorteio;
 
     private Context context;
+    private ListaSorteioAdapter listaSorteioAdapter;
     private Date dataInicial = Calendar.getInstance().getTime();
     private DatePickerDialog.OnDateSetListener dateSetListener = this;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private String datainicialStr;
     private Call<RestListResponse<Sorteio>> request;
-    private List<Sorteio> listaSorteios;
+    private List<Sorteio> listaSorteios = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +64,7 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().setTitle(R.string.menu_resultado);
 
-        return inflater.inflate(R.layout.fragment_resultado, container, false);
+        return inflater.inflate(R.layout.fragment_lista_sorteio, container, false);
     }
 
     @Override
@@ -69,8 +74,20 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
         ButterKnife.bind(this, view);
 
         inicializarDateInput();
+        setRecyclerListarResultado();
+        listarSorteios();
+    }
 
-        buscarResultados();
+    private void setRecyclerListarResultado() {
+        listaSorteioAdapter = new ListaSorteioAdapter(listaSorteios);
+
+        recyclerListarSorteio.setLayoutManager(new LinearLayoutManager(context));
+        recyclerListarSorteio.setHasFixedSize(true);
+        recyclerListarSorteio.addItemDecoration(new DividerItemDecoration(
+                recyclerListarSorteio.getContext(), DividerItemDecoration.VERTICAL
+        ));
+
+        recyclerListarSorteio.setAdapter(listaSorteioAdapter);
     }
 
     @OnClick(R.id.dataInicialEditText)
@@ -80,8 +97,8 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     @OnClick(R.id.botaoPesquisar)
-    void pesquisarResultado() {
-        buscarResultados();
+    void buscarSorteios() {
+        listarSorteios();
     }
 
     @Override
@@ -106,12 +123,11 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     private void showProgressBar(boolean show) {
-        recyclerListarResultado.setVisibility(show ? View.GONE : View.VISIBLE);
-        progressBarResultado.setVisibility(show ? View.VISIBLE : View.GONE);
+        recyclerListarSorteio.setVisibility(show ? View.GONE : View.VISIBLE);
+        progressBarSorteio.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-
-    private void buscarResultados() {
+    private void listarSorteios() {
         try {
             showProgressBar(true);
 
@@ -128,12 +144,12 @@ public class ResultadoFragment extends Fragment implements DatePickerDialog.OnDa
                     if (response.isSuccessful()) {
                         RestListResponse<Sorteio> resposta = response.body();
 
-                        if (resposta.meta.status.equals(RestRequest.SUCCESS)) {
-                            listaSorteios = resposta.data;
-                        } else {
-                            Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
-                        }
+                        listaSorteios = resposta.data != null
+                                ? resposta.data
+                                : new ArrayList<>();
 
+                        listaSorteioAdapter.setData(listaSorteios);
+                        Toast.makeText(context, resposta.meta.mensagem, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, R.string.processing_error, Toast.LENGTH_SHORT).show();
                     }
